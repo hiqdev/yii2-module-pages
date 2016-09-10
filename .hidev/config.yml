@@ -1,0 +1,9 @@
+package:
+    type:           yii2-extension
+    name:           yii2-module-pages
+    title:          Yii2 Pages Module
+    headline:       Yii2 Pages
+    keywords:       yii2, module, pages
+    namespace:      hiqdev\yii2\modules\pages
+    description:    |
+        Provides easy creation of pages for site.

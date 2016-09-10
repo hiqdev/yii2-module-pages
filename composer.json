@@ -1,0 +1,63 @@
+{
+    "name": "hiqdev/yii2-module-pages",
+    "type": "yii2-extension",
+    "description": "Yii2 Pages Module",
+    "keywords": [
+        "yii2",
+        "module",
+        "pages"
+    ],
+    "homepage": "https://github.com/hiqdev/yii2-module-pages",
+    "license": "BSD-3-Clause",
+    "support": {
+        "email": "support@hiqdev.com",
+        "source": "https://github.com/hiqdev/yii2-module-pages",
+        "issues": "https://github.com/hiqdev/yii2-module-pages/issues",
+        "wiki": "https://github.com/hiqdev/yii2-module-pages/wiki",
+        "forum": "http://forum.hiqdev.com/"
+    },
+    "authors": [
+        {
+            "name": "Andrii Vasyliev",
+            "role": "Project lead",
+            "email": "sol@hiqdev.com",
+            "homepage": "http://hipanel.com/"
+        },
+        {
+            "name": "Dmitry Naumenko",
+            "role": "Lead backend developer",
+            "email": "silverfire@hiqdev.com",
+            "homepage": "http://silverfire.me/"
+        },
+        {
+            "name": "Andrey Klochok",
+            "role": "Lead frontend developer",
+            "email": "tafid@hiqdev.com",
+            "homepage": "http://hiqdev.com/"
+        },
+        {
+            "name": "Yuriy Myronchuk",
+            "role": "QA Lead",
+            "email": "bladeroot@hiqdev.com",
+            "homepage": "http://hiqdev.com/"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "^2.0"
+    },
+    "require-dev": {
+        "hiqdev/hidev-php": "<2.0 || dev-master",
+        "hiqdev/hidev-hiqdev": "<2.0 || dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "hiqdev\\yii2\\modules\\pages\\": "src"
+        }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ]
+}
