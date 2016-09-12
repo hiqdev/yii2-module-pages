@@ -8,7 +8,20 @@ class Module extends \yii\base\Module
 {
     protected $_storage;
 
-    public $extensions = ['md', 'php', 'twig'];
+    public $handlers = [
+        'md'    => 'renderMarkdown',
+        'php'   => 'renderPhp',
+        'twig'  => 'renderTwig',
+    ];
+
+    /**
+     * This to use standard app pathes for views and layouts.
+     * @return string
+     */
+    public function getViewPath()
+    {
+        return Yii::$app->getViewPath();
+    }
 
     public function find($page)
     {
@@ -16,7 +29,7 @@ class Module extends \yii\base\Module
             return $page;
         }
 
-        foreach ($this->extensions as $extension) {
+        foreach (array_keys($this->handlers) as $extension) {
             $path = $page . '.' . $extension;
             if ($this->getStorage()->has($path)) {
                 return $path;
@@ -24,6 +37,22 @@ class Module extends \yii\base\Module
         }
 
         return null;
+    }
+
+    public function localPath($path)
+    {
+        /// XXX: works for Local Filesystem only
+        /// TODO: for others copying to be implemented
+        return $this->getStorage()->path . DIRECTORY_SEPARATOR . $path;
+    }
+
+    /**
+     * Reads given path as array of already rtrimmed lines.
+     */
+    public function readArray($path)
+    {
+        /// XXX: performance
+        return preg_split("/((\r?\n)|(\r\n?))/", $this->getStorage()->read($path));
     }
 
     public function setStorage($value)

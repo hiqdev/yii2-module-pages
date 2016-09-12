@@ -5,33 +5,57 @@ namespace hiqdev\yii2\modules\pages\controllers;
 use cebe\markdown\GithubMarkdown;
 use Symfony\Component\Yaml\Yaml;
 use Yii;
+use yii\helpers\Html;
 use yii\web\NotFoundHttpException;
+use yii\base\InvalidConfigException;
 
 class RenderController extends \yii\web\Controller
 {
-    use \hiqdev\yii2\modules\pages\GetModuleTrait;
+    public function getViewPath()
+    {
+        return Yii::$app->getViewPath();
+    }
 
+    /**
+     * Index action.
+     * @param string $page
+     * @return string rendered page
+     */
     public function actionIndex($page = null)
     {
         if (!$page) {
             $page = 'index';
         }
 
-        $path = $this->getModule()->find($page);
+        $path = $this->module->find($page);
 
         if ($path === null) {
             throw new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
         }
 
-        return $this->renderMarkdown($path);
+        $extension = pathinfo($path)['extension'];
+        if (!isset($this->module->handlers[$extension])) {
+            throw new InvalidConfigException('not handled extension:' . $extension);
+        }
+        $handler = $this->module->handlers[$extension];
+
+        return call_user_func([$this, $handler], $path);
+    }
+
+    public function renderTwig($path)
+    {
+        throw new InvalidConfigException('not implemented twig handler');
+    }
+
+    public function renderPhp($path)
+    {
+        $content = $this->renderFile($this->module->localPath($path));
+        return $this->renderContent($content);
     }
 
     public function renderMarkdown($path)
     {
-        $lines = file($path);
-        list($data, $md) = $this->extractData($lines);
-
-#var_dump(compact('data', 'md')); die();
+        list($data, $md) = $this->extractData($path);
 
         $parser = new GithubMarkdown();
         $html = $parser->parse($md);
@@ -39,20 +63,25 @@ class RenderController extends \yii\web\Controller
         return $this->renderHtml($html, $data);
     }
 
-    public function renderHtml($html, $data)
+    public function renderHtml($html, array $data)
     {
         if (!empty($data['layout'])) {
             $this->layout = $data['layout'];
         }
-        $data['params'] = $data;
-        $data['html'] = $html;
 
-        return $this->render('html', $data);
+        if (!empty($data['title'])) {
+            $this->view->title = Html::encode($data['title']);
+        }
+
+        $this->view->params = $data;
+
+        return $this->renderContent($html);
     }
 
-    public function extractData(array $lines)
+    public function extractData($path)
     {
-        $marker = "---\n";
+        $lines = $this->module->readArray($path);
+        $marker = "---";
         $line = array_shift($lines);
         if ($line === $marker) {
             $meta = '';
@@ -61,7 +90,7 @@ class RenderController extends \yii\web\Controller
                 if ($line === $marker) {
                     break;
                 }
-                $meta .= $line;
+                $meta .= "\n" . $line;
             }
             $line = '';
             $data = Yaml::parse($meta);
