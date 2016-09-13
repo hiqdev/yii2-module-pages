@@ -26,7 +26,12 @@ class Module extends \yii\base\Module
     public function find($page)
     {
         if ($this->getStorage()->has($page)) {
-            return $page;
+            $meta = $this->getStorage()->getMetadata($page);
+            if ($meta['type'] === 'dir') {
+                $page .= '/index';
+            } else {
+                return $page;
+            }
         }
 
         foreach (array_keys($this->handlers) as $extension) {
@@ -43,7 +48,7 @@ class Module extends \yii\base\Module
     {
         /// XXX: works for Local Filesystem only
         /// TODO: for others copying to be implemented
-        return $this->getStorage()->path . DIRECTORY_SEPARATOR . $path;
+        return $this->getStorage()->path . '/' . $path;
     }
 
     /**
