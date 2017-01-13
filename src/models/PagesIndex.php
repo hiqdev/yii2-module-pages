@@ -3,6 +3,7 @@
 namespace hiqdev\yii2\modules\pages\models;
 
 use Yii;
+use yii\data\ArrayDataProvider;
 
 class PagesIndex
 {
@@ -25,5 +26,6 @@ class PagesIndex
 
     public function getDataProvider()
     {
+        return new ArrayDataProvider(['allModels' => $this->pages]);
     }
 }
