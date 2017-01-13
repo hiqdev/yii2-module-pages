@@ -18,8 +18,8 @@ class PagesIndex
     public static function createFromDir($path)
     {
         $list = static::getStorage()->listContents($path);
-        var_dump($list);die();
         $index = new static();
+        $index->pages = $list;
 
         return $index;
     }
