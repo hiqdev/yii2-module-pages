@@ -9,9 +9,9 @@ class Module extends \yii\base\Module
     protected $_storage;
 
     public $handlers = [
-        'md'    => 'renderMarkdown',
-        'php'   => 'renderPhp',
-        'twig'  => 'renderTwig',
+        'md'    => \hiqdev\yii2\modules\pages\models\MarkdownPage::class,
+        'php'   => \hiqdev\yii2\modules\pages\models\PhpPage::class,
+        'twig'  => \hiqdev\yii2\modules\pages\models\TwigPage::class,
     ];
 
     /**
@@ -26,12 +26,7 @@ class Module extends \yii\base\Module
     public function find($page)
     {
         if ($this->getStorage()->has($page)) {
-            $meta = $this->getStorage()->getMetadata($page);
-            if ($meta['type'] === 'dir') {
-                $page .= '/index';
-            } else {
-                return $page;
-            }
+            return $page;
         }
 
         foreach (array_keys($this->handlers) as $extension) {
@@ -42,6 +37,11 @@ class Module extends \yii\base\Module
         }
 
         return null;
+    }
+
+    public function getMetadata($page)
+    {
+        return $this->getStorage()->getMetadata($page);
     }
 
     public function localPath($path)

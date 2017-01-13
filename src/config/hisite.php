@@ -9,6 +9,7 @@ return [
     'components' => [
         'urlManager' => [
             'rules' => [
+                'pages/list' => 'pages/render/list',
                 'pages/<page:.*>' => 'pages/render/index',
             ],
         ],

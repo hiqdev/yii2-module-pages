@@ -2,8 +2,8 @@
 
 namespace hiqdev\yii2\modules\pages\controllers;
 
-use cebe\markdown\GithubMarkdown;
-use Symfony\Component\Yaml\Yaml;
+use hiqdev\yii2\modules\pages\models\AbstractPage;
+use hiqdev\yii2\modules\pages\models\PagesIndex;
 use Yii;
 use yii\helpers\Html;
 use yii\web\NotFoundHttpException;
@@ -33,13 +33,17 @@ class RenderController extends \yii\web\Controller
             throw new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
         }
 
-        $extension = pathinfo($path)['extension'];
-        if (!isset($this->module->handlers[$extension])) {
-            throw new InvalidConfigException('not handled extension:' . $extension);
-        }
-        $handler = $this->module->handlers[$extension];
+        $meta = $this->module->getMetadata($page);
 
-        return call_user_func([$this, $handler], $path);
+        if ($meta['type'] === 'dir') {
+            $index = PagesIndex::createFromDir($path);
+
+            return $this->render('index', $index);
+        } else {
+            $page = AbstractPage::createFromFile($path);
+
+            return $this->renderPage($page);
+        }
     }
 
     public function renderTwig($path)
@@ -53,51 +57,19 @@ class RenderController extends \yii\web\Controller
         return $this->renderContent($content);
     }
 
-    public function renderMarkdown($path)
+    public function renderPage($page, array $params = [])
     {
-        list($data, $md) = $this->extractData($path);
-
-        $parser = new GithubMarkdown();
-        $html = $parser->parse($md);
-
-        return $this->renderHtml($html, $data);
-    }
-
-    public function renderHtml($html, array $data)
-    {
-        if (!empty($data['layout'])) {
-            $this->layout = $data['layout'];
+        if ($page->layout) {
+            $this->layout = $page->layout;
         }
 
-        if (!empty($data['title'])) {
-            $this->view->title = Html::encode($data['title']);
+        if ($page->title) {
+            $this->view->title = Html::encode($page->title);
         }
 
-        $this->view->params = $data;
+        $this->view->params = $page->getData();
 
-        return $this->renderContent($html);
+        return $this->renderContent($page->render($params));
     }
 
-    public function extractData($path)
-    {
-        $lines = $this->module->readArray($path);
-        $marker = "---";
-        $line = array_shift($lines);
-        if ($line === $marker) {
-            $meta = '';
-            while (true) {
-                $line = array_shift($lines);
-                if ($line === $marker) {
-                    break;
-                }
-                $meta .= "\n" . $line;
-            }
-            $line = '';
-            $data = Yaml::parse($meta);
-        } else {
-            $data = [];
-        }
-
-        return [$data, $line . join("\n", $lines)];
-    }
 }
