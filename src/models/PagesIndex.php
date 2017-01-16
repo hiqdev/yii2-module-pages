@@ -26,6 +26,12 @@ class PagesIndex
 
     public function getDataProvider()
     {
-        return new ArrayDataProvider(['allModels' => $this->pages]);
+        $data = [];
+        foreach ($this->pages as $fileData) {
+            list($params) = AbstractPage::extractData($fileData['path']);
+            $data[] = array_merge($params, $fileData);
+        }
+
+        return new ArrayDataProvider(['allModels' => $data]);
     }
 }
