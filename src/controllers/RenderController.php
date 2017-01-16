@@ -46,11 +46,6 @@ class RenderController extends \yii\web\Controller
         }
     }
 
-    public function renderTwig($path)
-    {
-        throw new InvalidConfigException('not implemented twig handler');
-    }
-
     public function renderPhp($path)
     {
         $content = $this->renderFile($this->module->localPath($path));
