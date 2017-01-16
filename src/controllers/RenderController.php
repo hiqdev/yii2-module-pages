@@ -23,7 +23,7 @@ class RenderController extends \yii\web\Controller
     public function actionIndex($page = null)
     {
         if (!$page) {
-            $page = 'index';
+            $page = 'posts';
         }
 
         $path = $this->module->find($page);
