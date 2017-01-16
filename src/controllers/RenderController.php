@@ -7,7 +7,6 @@ use hiqdev\yii2\modules\pages\models\PagesIndex;
 use Yii;
 use yii\helpers\Html;
 use yii\web\NotFoundHttpException;
-use yii\base\InvalidConfigException;
 
 class RenderController extends \yii\web\Controller
 {
