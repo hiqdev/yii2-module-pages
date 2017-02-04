@@ -11,9 +11,11 @@ abstract class AbstractPage extends \yii\base\Object
 
     public $title;
 
-    protected $data = [];
+    protected $path;
 
     protected $text;
+
+    protected $data = [];
 
     public function setData(array $data)
     {
@@ -30,10 +32,11 @@ abstract class AbstractPage extends \yii\base\Object
         return $this->data;
     }
 
-    public function __construct(array $data, $text)
+    public function __construct($path, $text, array $data = [])
     {
-        $this->setData($data);
+        $this->path = $path;
         $this->text = $text;
+        $this->setData($data);
     }
 
     static public function getModule()
@@ -53,7 +56,7 @@ abstract class AbstractPage extends \yii\base\Object
         
         list($data, $text) = static::extractData($path);
 
-        return new $class($data, $text);
+        return new $class($path, $text, $data);
     }
 
     static public function extractData($path)
