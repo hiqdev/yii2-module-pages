@@ -45,12 +45,6 @@ class RenderController extends \yii\web\Controller
         }
     }
 
-    public function renderPhp($path)
-    {
-        $content = $this->renderFile($this->module->localPath($path));
-        return $this->renderContent($content);
-    }
-
     public function renderPage($page, array $params = [])
     {
         if ($page->layout) {

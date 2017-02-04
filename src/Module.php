@@ -14,6 +14,11 @@ class Module extends \yii\base\Module
         'twig'  => \hiqdev\yii2\modules\pages\models\TwigPage::class,
     ];
 
+    public static function getInstance()
+    {
+        return Yii::$app->getModule('pages');
+    }
+
     /**
      * This to use standard app pathes for views and layouts.
      * @return string
@@ -44,13 +49,6 @@ class Module extends \yii\base\Module
         return $this->getStorage()->getMetadata($page);
     }
 
-    public function localPath($path)
-    {
-        /// XXX: works for Local Filesystem only
-        /// TODO: for others copying to be implemented
-        return $this->getStorage()->path . '/' . $path;
-    }
-
     /**
      * Reads given path as array of already rtrimmed lines.
      */
@@ -58,6 +56,13 @@ class Module extends \yii\base\Module
     {
         /// XXX: performance
         return preg_split("/((\r?\n)|(\r\n?))/", $this->getStorage()->read($path));
+    }
+
+    public function getLocalPath($path)
+    {
+        /// XXX: works for Local Filesystem only
+        /// TODO: implement copying for others
+        return $this->getStorage()->path . '/' . $path;
     }
 
     public function setStorage($value)
