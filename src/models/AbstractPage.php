@@ -4,6 +4,7 @@ namespace hiqdev\yii2\modules\pages\models;
 
 use Symfony\Component\Yaml\Yaml;
 use Yii;
+use yii\base\InvalidConfigException;
 
 abstract class AbstractPage extends \yii\base\Object
 {
