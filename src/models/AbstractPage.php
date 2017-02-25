@@ -1,4 +1,12 @@
 <?php
+/**
+ * Yii2 Pages Module
+ *
+ * @link      https://github.com/hiqdev/yii2-module-pages
+ * @package   yii2-module-pages
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2016-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiqdev\yii2\modules\pages\models;
 
@@ -50,13 +58,13 @@ abstract class AbstractPage extends \yii\base\Object
         return $this->data['date'];
     }
 
-    static public function getModule()
+    public static function getModule()
     {
         /// XXX think
         return Yii::$app->getModule('pages');
     }
 
-    static public function createFromFile($path)
+    public static function createFromFile($path)
     {
         $extension = pathinfo($path)['extension'];
 
@@ -64,16 +72,16 @@ abstract class AbstractPage extends \yii\base\Object
             throw new InvalidConfigException('not handled extension:' . $extension);
         }
         $class = static::getModule()->handlers[$extension];
-        
+
         list($data, $text) = static::extractData($path);
 
         return new $class($path, $text, $data);
     }
 
-    static public function extractData($path)
+    public static function extractData($path)
     {
         $lines = static::getModule()->readArray($path);
-        $marker = "---";
+        $marker = '---';
         $line = array_shift($lines);
         if ($line === $marker) {
             $meta = '';
@@ -95,11 +103,9 @@ abstract class AbstractPage extends \yii\base\Object
 
     /**
      * Renders the page with given params.
-     * 
-     * @param array $params 
+     *
+     * @param array $params
      * @abstract
-     * @access public
-     * @return void
      */
     abstract public function render(array $params = []);
 }
