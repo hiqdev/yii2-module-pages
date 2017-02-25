@@ -37,7 +37,7 @@ class RenderController extends \yii\web\Controller
         if ($meta['type'] === 'dir') {
             $index = PagesIndex::createFromDir($path);
 
-            return $this->render('posts', ['dataProvider' => $index->getDataProvider()]);
+            return $this->render('index', ['dataProvider' => $index->getDataProvider()]);
         } else {
             $page = AbstractPage::createFromFile($path);
 
