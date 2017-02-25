@@ -12,7 +12,7 @@ class RenderController extends \yii\web\Controller
 {
     public function getViewPath()
     {
-        return Yii::$app->getViewPath();
+        return dirname(__DIR__) . '/views/render';
     }
 
     /**
@@ -37,7 +37,7 @@ class RenderController extends \yii\web\Controller
         if ($meta['type'] === 'dir') {
             $index = PagesIndex::createFromDir($path);
 
-            return $this->render('/site/index', ['dataProvider' => $index->getDataProvider()]);
+            return $this->render('posts', ['dataProvider' => $index->getDataProvider()]);
         } else {
             $page = AbstractPage::createFromFile($path);
 

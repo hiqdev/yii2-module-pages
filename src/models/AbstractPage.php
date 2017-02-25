@@ -40,6 +40,16 @@ abstract class AbstractPage extends \yii\base\Object
         $this->setData($data);
     }
 
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    public function getDate()
+    {
+        return $this->data['date'];
+    }
+
     static public function getModule()
     {
         /// XXX think

@@ -4,6 +4,7 @@ namespace hiqdev\yii2\modules\pages\models;
 
 use Yii;
 use yii\data\ArrayDataProvider;
+use yii\helpers\ArrayHelper;
 
 class PagesIndex
 {
@@ -11,7 +12,7 @@ class PagesIndex
 
     public static function getStorage()
     {
-        /// TODO ...
+        /// TODO get it properly
         return Yii::$app->getModule('pages')->getStorage();
     }
 
@@ -26,10 +27,15 @@ class PagesIndex
 
     public function getDataProvider()
     {
+        ArrayHelper::multisort($this->pages, 'basename', SORT_DESC);
+
         $data = [];
-        foreach ($this->pages as $fileData) {
-            list($params) = AbstractPage::extractData($fileData['path']);
-            $data[] = array_merge($params, $fileData);
+        foreach ($this->pages as $file) {
+            if ($file['basename'][0] == '.') {
+                continue;
+            }
+
+            $data[] = AbstractPage::createFromFile($file['path']);
         }
 
         return new ArrayDataProvider(['allModels' => $data]);
