@@ -25,7 +25,7 @@ $this->title = Yii::$app->name;
         ],
         'itemView' => function ($model, $key, $item, $widget) {
             $out = Html::tag('h1', Html::a($model->title, ['/pages/render/index', 'page' => $model->path]), ['class' => 'post-title']);
-            $out .= Html::tag('span', date('Y-m-d', strtotime($model->date)), ['class' => 'post-date']);
+            $out .= Html::tag('span', Yii::$app->formatter->asDate($model->date), ['class' => 'post-date']);
 
             return $out . $model->render();
         },
