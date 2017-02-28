@@ -15,6 +15,20 @@ return [
         ],
     ],
     'components' => [
+        'view' => [
+            'renderers' => [
+                'twig' => [
+                    'class' => \yii\twig\ViewRenderer::class,
+                    'cachePath' => '@runtime/Twig/cache',
+                    'options' => [
+                        'auto_reload' => true,
+                    ],
+                    'globals' => [
+                        'html' => \yii\helpers\Html::class,
+                    ],
+                ],
+            ],
+        ],
         'urlManager' => [
             'rules' => [
                 'pages/list' => 'pages/render/list',
