@@ -39,9 +39,11 @@ class Module extends \yii\base\Module
     public function find($page)
     {
         if ($this->isDir($page)) {
-            $index = $this->find($page . '/index');
-            if ($index) {
-                return $index;
+            foreach (['index', 'README'] as $name) {
+                $index = $this->find($page . '/' . $name);
+                if ($index) {
+                    return $index;
+                }
             }
         }
 
