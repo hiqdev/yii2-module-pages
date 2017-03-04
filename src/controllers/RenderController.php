@@ -40,9 +40,7 @@ class RenderController extends \yii\web\Controller
             throw new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
         }
 
-        $meta = $this->module->getMetadata($path);
-
-        if ($meta['type'] === 'dir') {
+        if ($this->module->isDir($path)) {
             $index = PagesIndex::createFromDir($path);
 
             return $this->render('index', ['dataProvider' => $index->getDataProvider()]);

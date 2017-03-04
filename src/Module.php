@@ -38,6 +38,13 @@ class Module extends \yii\base\Module
 
     public function find($page)
     {
+        if ($this->isDir($page)) {
+            $index = $this->find($page . '/index');
+            if ($index) {
+                return $index;
+            }
+        }
+
         if ($this->getStorage()->has($page)) {
             return $page;
         }
@@ -50,6 +57,17 @@ class Module extends \yii\base\Module
         }
 
         return null;
+    }
+
+    public function isDir($page)
+    {
+
+        if (!$this->getStorage()->has($page)) {
+            return null;
+        }
+        $meta = $this->getMetadata($page);
+
+        return $meta['type'] === 'dir';
     }
 
     public function getMetadata($page)
