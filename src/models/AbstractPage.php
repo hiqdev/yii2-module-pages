@@ -12,7 +12,6 @@ namespace hiqdev\yii2\modules\pages\models;
 
 use Symfony\Component\Yaml\Yaml;
 use Yii;
-use yii\base\InvalidConfigException;
 
 abstract class AbstractPage extends \yii\base\Object
 {
@@ -41,8 +40,10 @@ abstract class AbstractPage extends \yii\base\Object
         return $this->data;
     }
 
-    public function __construct($path, $text, array $data = [])
+    public function __construct($path)
     {
+        list($data, $text) = $this->extractData($path);
+
         $this->path = $path;
         $this->text = $text;
         $this->setData($data);
@@ -67,18 +68,12 @@ abstract class AbstractPage extends \yii\base\Object
     public static function createFromFile($path)
     {
         $extension = pathinfo($path)['extension'];
+        $class = static::getModule()->findPageClass($extension);
 
-        if (!isset(static::getModule()->handlers[$extension])) {
-            throw new InvalidConfigException('not handled extension:' . $extension);
-        }
-        $class = static::getModule()->handlers[$extension];
-
-        list($data, $text) = static::extractData($path);
-
-        return new $class($path, $text, $data);
+        return new $class($path);
     }
 
-    public static function extractData($path)
+    public function extractData($path)
     {
         $lines = static::getModule()->readArray($path);
         $marker = '---';
