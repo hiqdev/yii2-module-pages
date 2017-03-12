@@ -11,16 +11,26 @@
 namespace hiqdev\yii2\modules\pages;
 
 use Yii;
+use yii\base\InvalidConfigException;
 
 class Module extends \yii\base\Module
 {
     protected $_storage;
 
-    public $handlers = [
+    public $pageClasses = [
         'md'    => \hiqdev\yii2\modules\pages\models\MarkdownPage::class,
         'php'   => \hiqdev\yii2\modules\pages\models\PhpPage::class,
         'twig'  => \hiqdev\yii2\modules\pages\models\TwigPage::class,
     ];
+
+    public function findPageClass($extension)
+    {
+        if (!isset($this->pageClasses[$extension])) {
+            throw new InvalidConfigException('not handled extension:' . $extension);
+        }
+
+        return $this->pageClasses[$extension];
+    }
 
     public static function getInstance()
     {
@@ -51,7 +61,7 @@ class Module extends \yii\base\Module
             return $page;
         }
 
-        foreach (array_keys($this->handlers) as $extension) {
+        foreach (array_keys($this->pageClasses) as $extension) {
             $path = $page . '.' . $extension;
             if ($this->getStorage()->has($path)) {
                 return $path;
