@@ -74,9 +74,6 @@ abstract class AbstractPage extends \yii\base\Object
         $class = static::getModule()->handlers[$extension];
 
         list($data, $text) = static::extractData($path);
-        if (is_int($data['date'])) {
-            $data['date'] = date('c', $data['date']);
-        }
 
         return new $class($path, $text, $data);
     }
@@ -97,6 +94,9 @@ abstract class AbstractPage extends \yii\base\Object
             }
             $line = '';
             $data = Yaml::parse($meta);
+            if (is_int($data['date'])) {
+                $data['date'] = date('c', $data['date']);
+            }
         } else {
             $data = [];
         }
