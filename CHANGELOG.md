@@ -1,7 +1,8 @@
 # hiqdev/yii2-module-pages
 
-## [Under development]
+## [0.1.0] - 2017-03-14
 
+- Added reading front matter from Twig comment ([@hiqsol])
 - Added posts index rendering ([@hiqsol], [@tafid])
 - Added basics: twig and php pages rendering ([@tafid], [@hiqsol])
 
@@ -16,3 +17,4 @@
 [@BladeRoot]: https://github.com/BladeRoot
 [bladeroot@gmail.com]: https://github.com/BladeRoot
 [Under development]: https://github.com/hiqdev/yii2-module-pages/releases
+[0.1.0]: https://github.com/hiqdev/yii2-module-pages/releases/tag/0.1.0

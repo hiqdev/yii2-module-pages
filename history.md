@@ -1,7 +1,19 @@
 # hiqdev/yii2-module-pages
 
-## [Under development]
+## [0.1.0] - 2017-03-14
 
+- Added reading front matter from Twig comment
+    - [b6b3dad] 2017-03-14 renamed readQuotedLines <- getQuoted [@hiqsol]
+    - [af6d052] 2017-03-14 added reading front matter from Twig [@hiqsol]
+    - [7322082] 2017-03-12 redone extractData to virtual instead of static to become specific for page type [@hiqsol]
+    - [dca1067] 2017-03-12 renamed handlers -> pageClasses, added findPageClass [@hiqsol]
+    - [45dbd09] 2017-03-12 moved date fixing into extractData [@hiqsol]
+    - [4905bd1] 2017-03-04 added looking for README as dir index [@hiqsol]
+    - [3eb463b] 2017-03-04 added looking for index in dirs [@hiqsol]
+    - [7e74a7d] 2017-03-03 implemented TwigPage [@hiqsol]
+    - [452fb7a] 2017-02-28 adding twig rendering [@hiqsol]
+    - [fbe1076] 2017-02-26 added require yii2-twig [@hiqsol]
+    - [846360c] 2017-02-26 fixed getting date in AbstractPage [@hiqsol]
 - Added posts index rendering
     - [ffc1f0f] 2017-02-25 csfixed [@hiqsol]
     - [f9473c7] 2017-02-25 renamed `render/index.php` <- posts.php [@hiqsol]
@@ -68,3 +80,15 @@
 [c934b5e]: https://github.com/hiqdev/yii2-module-pages/commit/c934b5e
 [215af50]: https://github.com/hiqdev/yii2-module-pages/commit/215af50
 [Under development]: https://github.com/hiqdev/yii2-module-pages/releases
+[b6b3dad]: https://github.com/hiqdev/yii2-module-pages/commit/b6b3dad
+[af6d052]: https://github.com/hiqdev/yii2-module-pages/commit/af6d052
+[7322082]: https://github.com/hiqdev/yii2-module-pages/commit/7322082
+[dca1067]: https://github.com/hiqdev/yii2-module-pages/commit/dca1067
+[45dbd09]: https://github.com/hiqdev/yii2-module-pages/commit/45dbd09
+[4905bd1]: https://github.com/hiqdev/yii2-module-pages/commit/4905bd1
+[3eb463b]: https://github.com/hiqdev/yii2-module-pages/commit/3eb463b
+[7e74a7d]: https://github.com/hiqdev/yii2-module-pages/commit/7e74a7d
+[452fb7a]: https://github.com/hiqdev/yii2-module-pages/commit/452fb7a
+[fbe1076]: https://github.com/hiqdev/yii2-module-pages/commit/fbe1076
+[846360c]: https://github.com/hiqdev/yii2-module-pages/commit/846360c
+[0.1.0]: https://github.com/hiqdev/yii2-module-pages/releases/tag/0.1.0
