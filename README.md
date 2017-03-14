@@ -1,5 +1,4 @@
-Yii2 Pages
-==========
+# Yii2 Pages
 
 **Yii2 Pages Module**
 
