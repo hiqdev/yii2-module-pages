@@ -25,8 +25,11 @@ abstract class AbstractPage extends \yii\base\Object
 
     protected $data = [];
 
-    public function setData(array $data)
+    public function setData($data)
     {
+        if (!is_array($data)) {
+            return;
+        }
         $this->data = $data;
         foreach (['title', 'layout'] as $key) {
             if (isset($data[$key])) {
@@ -76,29 +79,56 @@ abstract class AbstractPage extends \yii\base\Object
     public function extractData($path)
     {
         $lines = static::getModule()->readArray($path);
-        $marker = '---';
-        $line = array_shift($lines);
-        if ($line === $marker) {
-            $meta = '';
-            while (true) {
-                $line = array_shift($lines);
-                if ($line === $marker) {
-                    break;
-                }
-                $meta .= "\n" . $line;
-            }
-            $line = '';
-            $data = Yaml::parse($meta);
-            if (is_int($data['date'])) {
-                $data['date'] = date('c', $data['date']);
-            }
-        } else {
+        $yaml = $this->getQuoted($lines, '/^---$/', '/^---$/');
+        if (empty($yaml)) {
             $data = [];
+            $text = $lines;
+        } else {
+            $data = $this->readYaml($yaml);
+            $text = array_slice($lines, count($yaml));
         }
 
-        return [$data, $line . join("\n", $lines)];
+        return [$data, implode("\n", $text)];
     }
 
+    public function readFrontMatter($lines)
+    {
+        $yaml = $this->getQuoted($lines, '/^---$/', '/^---$/');
+        if (empty($yaml)) {
+            return [];
+        }
+
+        return empty($yaml) ? [] : $this->readYaml($yaml);
+    }
+
+    public function readYaml($lines)
+    {
+        $data = Yaml::parse(implode("\n", $lines));
+        if (is_int($data['date'])) {
+            $data['date'] = date('c', $data['date']);
+        }
+
+        return $data;
+    }
+
+    public function getQuoted($lines, $headMarker, $tailMarker)
+    {
+        $line = array_shift($lines);
+        if (!preg_match($headMarker, $line, $matches)) {
+            return null;
+        }
+        $res[] = ltrim(substr($line, strlen($matches[0])));
+        while ($line) {
+            $line = array_shift($lines);
+            if (preg_match($tailMarker, $line, $matches)) {
+                $res[] = rtrim(substr($line, 0, -strlen($matches[0])));
+                break;
+            }
+            $res[] = $line;
+        }
+
+        return $res;
+    }
     /**
      * Renders the page with given params.
      *

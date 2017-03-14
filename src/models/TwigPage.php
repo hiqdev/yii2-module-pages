@@ -22,4 +22,20 @@ class TwigPage extends AbstractPage
 
         return Yii::$app->getView()->renderFile($path);
     }
+
+    public function extractData($path)
+    {
+        $lines = static::getModule()->readArray($path);
+        $matterLines = $this->getQuoted($lines, '/^{#/', '/#}$/');
+        if (empty($matterLines)) {
+            $data = [];
+            $text = $lines;
+        } else {
+            $data = $this->readFrontMatter($matterLines);
+            $text = array_slice($lines, count($matterLines));
+        }
+
+        return [$data, implode("\n", $text)];
+    }
+
 }
