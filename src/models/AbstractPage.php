@@ -79,7 +79,7 @@ abstract class AbstractPage extends \yii\base\Object
     public function extractData($path)
     {
         $lines = static::getModule()->readArray($path);
-        $yaml = $this->getQuoted($lines, '/^---$/', '/^---$/');
+        $yaml = $this->readQuotedLines($lines, '/^---$/', '/^---$/');
         if (empty($yaml)) {
             $data = [];
             $text = $lines;
@@ -93,7 +93,7 @@ abstract class AbstractPage extends \yii\base\Object
 
     public function readFrontMatter($lines)
     {
-        $yaml = $this->getQuoted($lines, '/^---$/', '/^---$/');
+        $yaml = $this->readQuotedLines($lines, '/^---$/', '/^---$/');
         if (empty($yaml)) {
             return [];
         }
@@ -111,7 +111,7 @@ abstract class AbstractPage extends \yii\base\Object
         return $data;
     }
 
-    public function getQuoted($lines, $headMarker, $tailMarker)
+    public function readQuotedLines($lines, $headMarker, $tailMarker)
     {
         $line = array_shift($lines);
         if (!preg_match($headMarker, $line, $matches)) {

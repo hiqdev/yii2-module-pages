@@ -26,7 +26,7 @@ class TwigPage extends AbstractPage
     public function extractData($path)
     {
         $lines = static::getModule()->readArray($path);
-        $matterLines = $this->getQuoted($lines, '/^{#/', '/#}$/');
+        $matterLines = $this->readQuotedLines($lines, '/^{#/', '/#}$/');
         if (empty($matterLines)) {
             $data = [];
             $text = $lines;
