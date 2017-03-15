@@ -13,7 +13,7 @@ Provides easy creation of pages for site.
 
 Supports:
 
-- different formats: markdown, twig, PHP
+- different page formats: markdown, twig, PHP
 - extracting front matter
 
 ## Installation

@@ -26,11 +26,11 @@ composer.lock
 # phpunit generated files
 coverage.clover
 
+# Binaries
+composer.phar
+
 # PHARs
 chkipper.phar
 php-cs-fixer.phar
 phpunit-skelgen.phar
 phpunit.phar
-
-# Binaries
-composer.phar
