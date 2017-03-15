@@ -63,6 +63,8 @@ class RenderController extends \yii\web\Controller
 
         $this->view->params = $page->getData();
 
+        $params['controller'] = $this;
+
         return $this->renderContent($page->render($params));
     }
 }
