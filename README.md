@@ -11,6 +11,11 @@
 
 Provides easy creation of pages for site.
 
+Supports:
+
+- different formats: markdown, twig, PHP
+- extracting front matter
+
 ## Installation
 
 The preferred way to install this yii2-extension is through [composer](http://getcomposer.org/download/).

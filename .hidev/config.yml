@@ -7,3 +7,8 @@ package:
     namespace:      hiqdev\yii2\modules\pages
     description:    |
         Provides easy creation of pages for site.
+
+        Supports:
+
+        - different formats: markdown, twig, PHP
+        - extracting front matter
