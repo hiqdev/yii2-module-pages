@@ -12,7 +12,6 @@ namespace hiqdev\yii2\modules\pages\models;
 
 use hiqdev\yii2\modules\pages\Module;
 use Yii;
-use yii\base\InvalidConfigException;
 
 class TwigPage extends AbstractPage
 {
