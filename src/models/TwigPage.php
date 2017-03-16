@@ -19,7 +19,7 @@ class TwigPage extends AbstractPage
     {
         $path = Module::getInstance()->getLocalPath($this->path);
 
-        return Yii::$app->getView()->renderFile($path);
+        return Yii::$app->getView()->renderFile($path, $params);
     }
 
     public function extractData($path)
