@@ -31,6 +31,9 @@ class RenderController extends \yii\web\Controller
     public function actionIndex($page = null)
     {
         if (!$page) {
+            $page = trim(Yii::$app->request->getUrl(), '/');
+        }
+        if (!$page) {
             $page = 'posts';
         }
 
