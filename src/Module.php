@@ -1,6 +1,6 @@
 <?php
 /**
- * Yii2 Pages Module
+ * Yii2 Pages Module.
  *
  * @link      https://github.com/hiqdev/yii2-module-pages
  * @package   yii2-module-pages
@@ -73,7 +73,6 @@ class Module extends \yii\base\Module
 
     public function isDir($page)
     {
-
         if (!$this->getStorage()->has($page)) {
             return null;
         }

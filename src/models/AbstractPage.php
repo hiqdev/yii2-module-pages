@@ -1,6 +1,6 @@
 <?php
 /**
- * Yii2 Pages Module
+ * Yii2 Pages Module.
  *
  * @link      https://github.com/hiqdev/yii2-module-pages
  * @package   yii2-module-pages
@@ -129,6 +129,7 @@ abstract class AbstractPage extends \yii\base\Object
 
         return $res;
     }
+
     /**
      * Renders the page with given params.
      *
