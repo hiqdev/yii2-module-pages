@@ -16,6 +16,15 @@ Supports:
 - different page formats: markdown, twig, PHP
 - extracting front matter
 
+The idea is to create general mechanism of site pages.
+Pages are taken from and saved to repository.
+And you can provide any compatible repository,
+so pages can be taken from:
+
+- files (the default repository provided with this package)
+- any database
+- any API
+
 ## Installation
 
 The preferred way to install this yii2-extension is through [composer](http://getcomposer.org/download/).

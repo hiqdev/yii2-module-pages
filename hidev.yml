@@ -4,7 +4,6 @@ package:
     title:          Yii2 Pages Module
     headline:       Yii2 Pages
     keywords:       yii2, module, pages
-    namespace:      hiqdev\yii2\modules\pages
     description:    |
         Provides easy creation of pages for site.
 
@@ -12,3 +11,12 @@ package:
 
         - different page formats: markdown, twig, PHP
         - extracting front matter
+
+        The idea is to create general mechanism of site pages.
+        Pages are taken from and saved to repository.
+        And you can provide any compatible repository,
+        so pages can be taken from:
+
+        - files (the default repository provided with this package)
+        - any database
+        - any API
