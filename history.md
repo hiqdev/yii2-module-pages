@@ -1,5 +1,23 @@
 # hiqdev/yii2-module-pages
 
+## [0.1.1] - 2017-10-05
+
+- Added page `url` property
+    - [42a52d1] 2017-10-05 docs [@hiqsol]
+    - [91b6a26] 2017-10-05 inited empty tests [@hiqsol]
+    - [8c4081a] 2017-10-05 csfixed [@hiqsol]
+    - [9fd7a72] 2017-10-05 added `url` property to Page and used in pages index [@hiqsol]
+    - [a2f237a] 2017-07-06 finished renaming config `web` <- hisite [@hiqsol]
+    - [3246d59] 2017-05-24 csfixed [@hiqsol]
+    - [d8831cc] 2017-05-24 renamed `hidev.yml` [@hiqsol]
+    - [9cc9ae9] 2017-05-24 renamed config `web` <- hisite [@hiqsol]
+    - [b1c9ea9] 2017-04-15 added page detecting from url in RenderController [@hiqsol]
+    - [f73d9ad] 2017-03-16 added `OtherPage` [@hiqsol]
+    - [2edc133] 2017-03-16 added passing params to render [@hiqsol]
+    - [b77af5a] 2017-03-15 doc [@hiqsol]
+    - [969c7b8] 2017-03-15 doc [@hiqsol]
+    - [4557f5b] 2017-03-15 added passing controller into page views [@hiqsol]
+
 ## [0.1.0] - 2017-03-14
 
 - Added reading front matter from Twig comment
@@ -79,7 +97,7 @@
 [4e4fc9a]: https://github.com/hiqdev/yii2-module-pages/commit/4e4fc9a
 [c934b5e]: https://github.com/hiqdev/yii2-module-pages/commit/c934b5e
 [215af50]: https://github.com/hiqdev/yii2-module-pages/commit/215af50
-[Under development]: https://github.com/hiqdev/yii2-module-pages/releases
+[Under development]: https://github.com/hiqdev/yii2-module-pages/compare/0.1.0...HEAD
 [b6b3dad]: https://github.com/hiqdev/yii2-module-pages/commit/b6b3dad
 [af6d052]: https://github.com/hiqdev/yii2-module-pages/commit/af6d052
 [7322082]: https://github.com/hiqdev/yii2-module-pages/commit/7322082
@@ -92,3 +110,18 @@
 [fbe1076]: https://github.com/hiqdev/yii2-module-pages/commit/fbe1076
 [846360c]: https://github.com/hiqdev/yii2-module-pages/commit/846360c
 [0.1.0]: https://github.com/hiqdev/yii2-module-pages/releases/tag/0.1.0
+[42a52d1]: https://github.com/hiqdev/yii2-module-pages/commit/42a52d1
+[91b6a26]: https://github.com/hiqdev/yii2-module-pages/commit/91b6a26
+[8c4081a]: https://github.com/hiqdev/yii2-module-pages/commit/8c4081a
+[9fd7a72]: https://github.com/hiqdev/yii2-module-pages/commit/9fd7a72
+[a2f237a]: https://github.com/hiqdev/yii2-module-pages/commit/a2f237a
+[3246d59]: https://github.com/hiqdev/yii2-module-pages/commit/3246d59
+[d8831cc]: https://github.com/hiqdev/yii2-module-pages/commit/d8831cc
+[9cc9ae9]: https://github.com/hiqdev/yii2-module-pages/commit/9cc9ae9
+[b1c9ea9]: https://github.com/hiqdev/yii2-module-pages/commit/b1c9ea9
+[f73d9ad]: https://github.com/hiqdev/yii2-module-pages/commit/f73d9ad
+[2edc133]: https://github.com/hiqdev/yii2-module-pages/commit/2edc133
+[b77af5a]: https://github.com/hiqdev/yii2-module-pages/commit/b77af5a
+[969c7b8]: https://github.com/hiqdev/yii2-module-pages/commit/969c7b8
+[4557f5b]: https://github.com/hiqdev/yii2-module-pages/commit/4557f5b
+[0.1.1]: https://github.com/hiqdev/yii2-module-pages/compare/0.1.0...0.1.1
