@@ -1,6 +1,6 @@
 <?php
 /**
- * Yii2 Pages Module.
+ * Yii2 Pages Module
  *
  * @link      https://github.com/hiqdev/yii2-module-pages
  * @package   yii2-module-pages
@@ -22,6 +22,7 @@ class OtherPage extends AbstractPage
 
         if ($mimeType === 'text/plain') {
             $text = Module::getInstance()->getStorage()->read($this->path);
+
             return "<pre>$text</pre>";
         }
 
