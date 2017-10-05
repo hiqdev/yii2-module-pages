@@ -25,13 +25,15 @@ abstract class AbstractPage extends \yii\base\Object
 
     protected $data = [];
 
+    protected $url;
+
     public function setData($data)
     {
         if (!is_array($data)) {
             return;
         }
         $this->data = $data;
-        foreach (['title', 'layout'] as $key) {
+        foreach (['title', 'layout', 'url'] as $key) {
             if (isset($data[$key])) {
                 $this->{$key} = $data[$key];
             }
@@ -60,6 +62,11 @@ abstract class AbstractPage extends \yii\base\Object
     public function getDate()
     {
         return $this->data['date'];
+    }
+
+    public function getUrl()
+    {
+        return $this->url ?: ['/pages/render/index', 'page' => $this->getPath()];
     }
 
     public static function getModule()

@@ -24,7 +24,7 @@ $this->title = Yii::$app->name;
             'nextPageLabel' => Yii::t('hiqdev:com', 'Older'),
         ],
         'itemView' => function ($model, $key, $item, $widget) {
-            $out = Html::tag('h1', Html::a($model->title, ['/pages/render/index', 'page' => $model->path]), ['class' => 'post-title']);
+            $out = Html::tag('h1', Html::a($model->title, $model->getUrl()), ['class' => 'post-title']);
             $out .= Html::tag('span', Yii::$app->formatter->asDate($model->date), ['class' => 'post-date']);
 
             return $out . $model->render();
