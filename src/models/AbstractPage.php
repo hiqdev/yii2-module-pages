@@ -13,7 +13,7 @@ namespace hiqdev\yii2\modules\pages\models;
 use Symfony\Component\Yaml\Yaml;
 use Yii;
 
-abstract class AbstractPage extends \yii\base\Object
+abstract class AbstractPage extends \yii\base\BaseObject
 {
     public $layout;
 
