@@ -15,17 +15,37 @@ use Yii;
 
 abstract class AbstractPage extends \yii\base\BaseObject
 {
+    /** @var \yii\web\View */
+    protected $view;
+
     public $layout;
 
+    /** @var string */
     public $title;
 
+    /** @var null|string */
     protected $path;
 
+    /** @var string */
     protected $text;
 
     protected $data = [];
 
     protected $url;
+
+    public function __construct($path = null, $config = [])
+    {
+        if ($path) {
+            list($data, $text) = $this->extractData($path);
+
+            $this->path = $path;
+            $this->text = $text;
+            $this->setData($data);
+        }
+
+        $this->view = Yii::$app->view;
+        parent::__construct($config);
+    }
 
     public function setData($data)
     {
@@ -43,15 +63,6 @@ abstract class AbstractPage extends \yii\base\BaseObject
     public function getData()
     {
         return $this->data;
-    }
-
-    public function __construct($path)
-    {
-        list($data, $text) = $this->extractData($path);
-
-        $this->path = $path;
-        $this->text = $text;
-        $this->setData($data);
     }
 
     public function getPath()
@@ -144,4 +155,12 @@ abstract class AbstractPage extends \yii\base\BaseObject
      * @abstract
      */
     abstract public function render(array $params = []);
+
+    /**
+     * @param string $text
+     */
+    public function setText(string $text): void
+    {
+        $this->text = $text;
+    }
 }

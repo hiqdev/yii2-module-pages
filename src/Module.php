@@ -10,6 +10,7 @@
 
 namespace hiqdev\yii2\modules\pages;
 
+use hiqdev\yii2\modules\pages\models\AbstractPage;
 use Yii;
 
 class Module extends \yii\base\Module
@@ -46,29 +47,39 @@ class Module extends \yii\base\Module
         return Yii::$app->getViewPath();
     }
 
-    public function find($page)
+    public function find($pageName): ?AbstractPage
     {
-        if ($this->isDir($page)) {
-            foreach (['index', 'README'] as $name) {
-                $index = $this->find($page . '/' . $name);
-                if ($index) {
-                    return $index;
-                }
-            }
-        }
+//        if ($this->isDir($page)) {
+//            foreach (['index', 'README'] as $name) {
+//                $index = $this->find($page . '/' . $name);
+//                if ($index) {
+//                    return $index;
+//                }
+//            }
+//        }
 
-        if ($this->getStorage()->has($page)) {
-            return $page;
-        }
+        $page = $this->getStorage()->getPage($pageName);
 
-        foreach (array_keys($this->pageClasses) as $extension) {
-            $path = $page . '.' . $extension;
-            if ($this->getStorage()->has($path)) {
-                return $path;
-            }
-        }
+        return $page;
+//        if ($this->getStorage()->has($pageName)) {
+//            return $page;
+//        }
 
-        return null;
+//        foreach (array_keys($this->pageClasses) as $extension) {
+//            $path = $page . '.' . $extension;
+//            if ($this->getStorage()->has($path)) {
+//                return $path;
+//            }
+//        }
+
+//        return null;
+    }
+
+    public function findList()
+    {
+        $list = $this->getStorage()->getList();
+
+        return $list;
     }
 
     public function isDir($page)

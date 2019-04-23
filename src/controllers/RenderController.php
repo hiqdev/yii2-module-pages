@@ -16,6 +16,7 @@ use Yii;
 use yii\helpers\Html;
 use yii\web\NotFoundHttpException;
 
+
 class RenderController extends \yii\web\Controller
 {
     public function getViewPath()
@@ -25,33 +26,46 @@ class RenderController extends \yii\web\Controller
 
     /**
      * Index action.
-     * @param string $page
+     * @param string|null $pageName
      * @return string rendered page
+     * @throws \yii\base\InvalidConfigException
      */
-    public function actionIndex($page = null)
+    public function actionIndex(string $pageName = null)
     {
-        if (!$page) {
-            $page = trim(Yii::$app->request->getUrl(), '/');
+        if (!$pageName) {
+            $pageName = $this->getPageName();
         }
-        if (!$page) {
-            $page = 'posts';
-        }
+//        if (!$page) {
+//            $page = 'posts';
+//        }
 
-        $path = $this->module->find($page);
+        $page = $this->module->find($pageName);
 
-        if ($path === null) {
+        if ($page === null) {
             throw new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
         }
 
-        if ($this->module->isDir($path)) {
-            $index = PagesIndex::createFromDir($path);
+        return $this->renderPage($page);
 
-            return $this->render('index', ['dataProvider' => $index->getDataProvider()]);
-        } else {
-            $page = AbstractPage::createFromFile($path);
+//        $path = $this->module->find($page);
+//
+//        if ($path === null) {
+//            throw new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
+//        }
+//        if ($this->module->isDir($path)) {
+//            $index = PagesIndex::createFromDir($path);
+//
+//            return $this->render('index', ['dataProvider' => $index->getDataProvider()]);
+//        } else {
+//            $page = AbstractPage::createFromFile($path);
+//
+//            return $this->renderPage($page);
+//        }
+    }
 
-            return $this->renderPage($page);
-        }
+    private function getPageName()
+    {
+        return end(explode('/', trim(Yii::$app->request->getUrl(), '/')));
     }
 
     public function renderPage($page, array $params = [])
@@ -69,5 +83,12 @@ class RenderController extends \yii\web\Controller
         $params['controller'] = $this;
 
         return $this->renderContent($page->render($params));
+    }
+
+    public function actionList()
+    {
+        $list = $this->module->findList();
+
+        return $this->renderPage($list);
     }
 }

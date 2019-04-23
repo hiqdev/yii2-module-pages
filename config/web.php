@@ -31,6 +31,7 @@ return [
         ],
         'urlManager' => [
             'rules' => [
+                'pages' => 'pages/render/list',
                 'pages/list' => 'pages/render/list',
                 'pages/<page:.*>' => 'pages/render/index',
             ],
