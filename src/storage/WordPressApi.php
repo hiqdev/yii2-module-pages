@@ -1,4 +1,12 @@
 <?php
+/**
+ * Yii2 Pages Module
+ *
+ * @link      https://github.com/hiqdev/yii2-module-pages
+ * @package   yii2-module-pages
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2016-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiqdev\yii2\modules\pages\storage;
 
@@ -12,7 +20,7 @@ use GuzzleHttp\Client as GuzzleClient;
 use yii\base\BaseObject;
 use yii\helpers\Url;
 
-class WordPressApi extends BaseObject
+class WordPressApi extends BaseObject implements StorageInterface
 {
     /** @var WpClient */
     private $client;

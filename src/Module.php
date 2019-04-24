@@ -49,30 +49,9 @@ class Module extends \yii\base\Module
 
     public function find($pageName): ?AbstractPage
     {
-//        if ($this->isDir($page)) {
-//            foreach (['index', 'README'] as $name) {
-//                $index = $this->find($page . '/' . $name);
-//                if ($index) {
-//                    return $index;
-//                }
-//            }
-//        }
-
         $page = $this->getStorage()->getPage($pageName);
 
         return $page;
-//        if ($this->getStorage()->has($pageName)) {
-//            return $page;
-//        }
-
-//        foreach (array_keys($this->pageClasses) as $extension) {
-//            $path = $page . '.' . $extension;
-//            if ($this->getStorage()->has($path)) {
-//                return $path;
-//            }
-//        }
-
-//        return null;
     }
 
     public function findList()
@@ -80,21 +59,6 @@ class Module extends \yii\base\Module
         $list = $this->getStorage()->getList();
 
         return $list;
-    }
-
-    public function isDir($page)
-    {
-        if (!$this->getStorage()->has($page)) {
-            return null;
-        }
-        $meta = $this->getMetadata($page);
-
-        return $meta['type'] === 'dir';
-    }
-
-    public function getMetadata($page)
-    {
-        return $this->getStorage()->getMetadata($page);
     }
 
     /**

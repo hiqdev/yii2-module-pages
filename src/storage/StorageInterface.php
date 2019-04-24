@@ -10,8 +10,9 @@
 
 namespace hiqdev\yii2\modules\pages\storage;
 
+use hiqdev\yii2\modules\pages\models\AbstractPage;
 
 interface StorageInterface
 {
-    public function has(string $page): ?string;
+    public function getPage(string $pageName): ?AbstractPage;
 }

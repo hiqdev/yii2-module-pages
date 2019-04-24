@@ -65,7 +65,9 @@ class RenderController extends \yii\web\Controller
 
     private function getPageName()
     {
-        return end(explode('/', trim(Yii::$app->request->getUrl(), '/')));
+        preg_match('/^.+pages\/(?<pageName>.+)$/', Yii::$app->request->getUrl(), $matches);
+
+        return trim($matches['pageName'], '/');
     }
 
     public function renderPage($page, array $params = [])
