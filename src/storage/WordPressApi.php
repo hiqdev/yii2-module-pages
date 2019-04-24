@@ -2,14 +2,14 @@
 
 namespace hiqdev\yii2\modules\pages\storage;
 
-use hiqdev\yii2\collection\BaseObject;
+use Yii;
 use hiqdev\yii2\modules\pages\models\AbstractPage;
 use hiqdev\yii2\modules\pages\models\RenderedPage;
 use Vnn\WpApiClient\Auth\WpBasicAuth;
 use Vnn\WpApiClient\Http\GuzzleAdapter;
 use Vnn\WpApiClient\WpClient;
 use GuzzleHttp\Client as GuzzleClient;
-use Yii;
+use yii\base\BaseObject;
 use yii\helpers\Url;
 
 class WordPressApi extends BaseObject
@@ -26,17 +26,10 @@ class WordPressApi extends BaseObject
     /** @var string */
     private $password;
 
-    public function init()
-    {
-        $this->getClient();
-
-        parent::init();
-    }
-
     public function getPage(string $pageName): ?AbstractPage
     {
         $language = \Yii::$app->language;
-        $pageData = $this->client->posts()->get(null, [
+        $pageData = $this->getClient()->posts()->get(null, [
             'slug'  => $pageName,
         ]);
 
@@ -61,7 +54,7 @@ class WordPressApi extends BaseObject
 
     public function getList(): ?AbstractPage
     {
-        $listData = $this->client->posts()->get(null, [
+        $listData = $this->getClient()->posts()->get(null, [
             'lang'  => \Yii::$app->language,
         ]);
 
@@ -87,12 +80,23 @@ class WordPressApi extends BaseObject
         ]);
     }
 
-    private function getClient(): void
+    private function getClient(): WpClient
     {
         if (!$this->client) {
-            $this->client = new WpClient(new GuzzleAdapter(new GuzzleClient()), $this->url);
-            $this->client->setCredentials(new WpBasicAuth($this->login, $this->password));
+            $this->client = Yii::$container->get(WpClient::class, [
+                Yii::$container->get(GuzzleAdapter::class, [
+                    Yii::$container->get(GuzzleClient::class)
+                ]),
+                $this->url
+            ]);
+
+            $this->client->setCredentials(Yii::$container->get(WpBasicAuth::class, [
+                $this->login,
+                $this->password
+            ]));
         }
+
+        return $this->client;
     }
 
     /**
