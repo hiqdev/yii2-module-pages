@@ -63,25 +63,31 @@ class RenderController extends \yii\web\Controller
 //        }
     }
 
-    private function getPageName()
+    /**
+     * @return string
+     * @throws \yii\base\InvalidConfigException
+     */
+    private function getPageName(): string
     {
         preg_match('/^.+pages\/(?<pageName>.+)$/', Yii::$app->request->getUrl(), $matches);
 
         return trim($matches['pageName'], '/');
     }
 
-    public function renderPage($page, array $params = [])
+    /**
+     * @param AbstractPage $page
+     * @param array $params
+     * @return string
+     */
+    private function renderPage(AbstractPage $page, array $params = []): string
     {
         if ($page->layout) {
             $this->layout = $page->layout;
         }
-
         if ($page->title) {
             $this->view->title = Html::encode($page->title);
         }
-
         $this->view->params = $page->getData();
-
         $params['controller'] = $this;
 
         return $this->renderContent($page->render($params));

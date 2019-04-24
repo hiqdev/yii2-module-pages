@@ -11,29 +11,15 @@
 namespace hiqdev\yii2\modules\pages;
 
 use hiqdev\yii2\modules\pages\models\AbstractPage;
+use hiqdev\yii2\modules\pages\storage\StorageInterface;
 use Yii;
 
 class Module extends \yii\base\Module
 {
+    /** @var array|StorageInterface */
     protected $_storage;
 
-    public $pageClasses = [
-        ''      => \hiqdev\yii2\modules\pages\models\OtherPage::class,
-        'md'    => \hiqdev\yii2\modules\pages\models\MarkdownPage::class,
-        'php'   => \hiqdev\yii2\modules\pages\models\PhpPage::class,
-        'twig'  => \hiqdev\yii2\modules\pages\models\TwigPage::class,
-    ];
-
-    public function findPageClass($extension)
-    {
-        if (empty($this->pageClasses[$extension])) {
-            $extension = '';
-        }
-
-        return $this->pageClasses[$extension];
-    }
-
-    public static function getInstance()
+    public static function getInstance(): Module
     {
         return Yii::$app->getModule('pages');
     }
@@ -47,7 +33,11 @@ class Module extends \yii\base\Module
         return Yii::$app->getViewPath();
     }
 
-    public function find($pageName): ?AbstractPage
+    /**
+     * @param string $pageName
+     * @return AbstractPage|null
+     */
+    public function find(string $pageName): ?AbstractPage
     {
         $page = $this->getStorage()->getPage($pageName);
 
@@ -59,22 +49,6 @@ class Module extends \yii\base\Module
         $list = $this->getStorage()->getList();
 
         return $list;
-    }
-
-    /**
-     * Reads given path as array of already rtrimmed lines.
-     */
-    public function readArray($path)
-    {
-        /// XXX: performance
-        return preg_split("/((\r?\n)|(\r\n?))/", $this->getStorage()->read($path));
-    }
-
-    public function getLocalPath($path)
-    {
-        /// XXX: works for Local Filesystem only
-        /// TODO: implement copying for others
-        return $this->getStorage()->path . '/' . $path;
     }
 
     public function setStorage($value)

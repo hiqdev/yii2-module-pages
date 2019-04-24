@@ -1,4 +1,12 @@
 <?php
+/**
+ * Yii2 Pages Module
+ *
+ * @link      https://github.com/hiqdev/yii2-module-pages
+ * @package   yii2-module-pages
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2016-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiqdev\yii2\modules\pages\storage;
 
@@ -22,6 +30,11 @@ class FileSystemStorage extends BaseObject implements StorageInterface
         'twig'  => \hiqdev\yii2\modules\pages\models\TwigPage::class,
     ];
 
+    /**
+     * @param string $page
+     * @return AbstractPage|null
+     * @throws \yii\base\InvalidConfigException
+     */
     public function getPage(string $page): ?AbstractPage
     {
         if ($this->isDir($page)) {
@@ -36,14 +49,19 @@ class FileSystemStorage extends BaseObject implements StorageInterface
         foreach (array_keys($this->pageClasses) as $extension) {
             $path = $page . '.' . $extension;
             if ($this->getFileSystem()->has($path)) {
-                return AbstractPage::createFromFile($path);
+                return AbstractPage::createFromFile($path, $this);
             }
         }
 
         return null;
     }
 
-    public function isDir($page)
+    /**
+     * @param string $page
+     * @return bool|null
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function isDir(string $page): ?bool
     {
         if (!$this->getFileSystem()->has($page)) {
             return null;
@@ -98,6 +116,38 @@ class FileSystemStorage extends BaseObject implements StorageInterface
     }
 
     /**
+     * @param string $extension
+     * @return string
+     */
+    public function findPageClass(string $extension): string
+    {
+        if (empty($this->pageClasses[$extension])) {
+            $extension = '';
+        }
+
+        return $this->pageClasses[$extension];
+    }
+
+    /**
+     * Reads given path as array of already rtrimmed lines.
+     * @param string $path
+     * @return false|string[]
+     */
+    public function readArray(string $path)
+    {
+        return preg_split("/((\r?\n)|(\r\n?))/", $this->fileSystem->read($path));
+    }
+
+    /**
+     * @param $filePath
+     * @return string
+     */
+    public function getLocalPath($filePath): string
+    {
+        return $this->path . '/' . $filePath;
+    }
+
+    /**
      * @return Filesystem
      * @throws \yii\base\InvalidConfigException
      */
@@ -112,6 +162,4 @@ class FileSystemStorage extends BaseObject implements StorageInterface
 
         return $this->fileSystem;
     }
-
-
 }
