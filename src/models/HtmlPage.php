@@ -10,7 +10,7 @@
 
 namespace hiqdev\yii2\modules\pages\models;
 
-class RenderedPage extends AbstractPage
+class HtmlPage extends AbstractPage
 {
     /** @var null|string */
     private $featuredImageUrl;

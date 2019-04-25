@@ -24,6 +24,8 @@ class Module extends \yii\base\Module
     /** @var int */
     private $pageSize;
 
+    const DEFAULT_PAGE_SIZE = 5;
+
     public static function getInstance(): Module
     {
         return Yii::$app->getModule('pages');
@@ -96,6 +98,6 @@ class Module extends \yii\base\Module
      */
     public function getPageSize(): int
     {
-        return $this->pageSize;
+        return $this->pageSize ?? self::DEFAULT_PAGE_SIZE;
     }
 }

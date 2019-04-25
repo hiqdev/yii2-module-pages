@@ -14,7 +14,7 @@ use Yii;
 use hiqdev\yii2\modules\pages\interfaces\PageInterface;
 use hiqdev\yii2\modules\pages\interfaces\StorageInterface;
 use hiqdev\yii2\modules\pages\models\PagesList;
-use hiqdev\yii2\modules\pages\models\RenderedPage;
+use hiqdev\yii2\modules\pages\models\HtmlPage;
 use Vnn\WpApiClient\Auth\WpBasicAuth;
 use Vnn\WpApiClient\Http\GuzzleAdapter;
 use Vnn\WpApiClient\WpClient;
@@ -75,7 +75,7 @@ class WordPressApi extends BaseObject implements StorageInterface
         }
 
         return Yii::createObject([
-            'class' => RenderedPage::class,
+            'class' => HtmlPage::class,
             'title' => $pageData['title']['rendered'],
             'text' => $pageData['content']['rendered'],
             'keywords' => $pageData['seo']['keywords'],
@@ -97,7 +97,7 @@ class WordPressApi extends BaseObject implements StorageInterface
         $pages = [];
         foreach ($listData as $pageData) {
             $pages[] = (Yii::createObject([
-                'class' => RenderedPage::class,
+                'class' => HtmlPage::class,
                 'title' => $pageData['title']['rendered'],
                 'text' => $pageData['excerpt']['rendered'],
                 'slug' => $pageData['slug'],
