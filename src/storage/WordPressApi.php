@@ -84,7 +84,7 @@ class WordPressApi extends BaseObject implements StorageInterface
         ]);
     }
 
-    public function getList(string $id = null): ?PagesList
+    public function getList(string $listName = null): ?PagesList
     {
         $listData = $this->getClient()->posts()->get(null, [
             'lang'  => \Yii::$app->language,

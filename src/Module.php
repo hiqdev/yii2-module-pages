@@ -22,9 +22,7 @@ class Module extends \yii\base\Module
     protected $_storage;
 
     /** @var int */
-    private $pageSize;
-
-    const DEFAULT_PAGE_SIZE = 5;
+    private $pageSize = 5;
 
     public static function getInstance(): Module
     {
@@ -98,6 +96,6 @@ class Module extends \yii\base\Module
      */
     public function getPageSize(): int
     {
-        return $this->pageSize ?? self::DEFAULT_PAGE_SIZE;
+        return $this->pageSize;
     }
 }

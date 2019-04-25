@@ -47,13 +47,13 @@ class CompositeStorage extends BaseObject implements StorageInterface
     }
 
     /**
-     * @param null|string $listId
+     * @param null|string $listName
      * @return PagesList|null
      */
-    public function getList(?string $listId = null): ?PagesList
+    public function getList(string $listName = null): ?PagesList
     {
         foreach ($this->storages as $storage) {
-            if (!is_null($list = $storage->getList($listId))) {
+            if (!is_null($list = $storage->getList($listName))) {
                 return $list;
             }
         }

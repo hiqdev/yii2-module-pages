@@ -39,6 +39,23 @@ abstract class AbstractPage extends BaseObject implements PageInterface
     /** @var string */
     protected $url;
 
+    /** @var null|string */
+    protected $featuredImageUrl;
+
+    /** @var null|string */
+    protected $slug;
+
+    /** @var null|string */
+    protected $keywords;
+
+    /** @var null|string */
+    protected $description;
+
+    /** @var null|string */
+    protected $canonical;
+
+    const META_DATA = ['keywords', 'description', 'canonical'];
+
     /** @var StorageInterface  */
     protected $storage;
 
@@ -169,5 +186,58 @@ abstract class AbstractPage extends BaseObject implements PageInterface
     public function setUrl(string $url): void
     {
         $this->url = $url;
+    }
+
+    protected function setMetaData(): void
+    {
+        foreach (self::META_DATA as $tag) {
+            if (is_null($this->{$tag})) {
+                continue;
+            }
+            $this->view->registerMetaTag([
+                'name' => $tag,
+                'content' => $this->{$tag},
+            ]);
+        }
+    }
+
+    /**
+     * @param null|string $slug
+     */
+    public function setSlug(?string $slug): void
+    {
+        $this->slug = $slug;
+    }
+
+    /**
+     * @param null|string $keywords
+     */
+    public function setKeywords(?string $keywords): void
+    {
+        $this->keywords = $keywords;
+    }
+
+    /**
+     * @param null|string $description
+     */
+    public function setDescription(?string $description): void
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @param null|string $featuredImageUrl
+     */
+    public function setFeaturedImageUrl(?string $featuredImageUrl): void
+    {
+        $this->featuredImageUrl = $featuredImageUrl;
+    }
+
+    /**
+     * @param null|string $canonical
+     */
+    public function setCanonical(?string $canonical): void
+    {
+        $this->canonical = $canonical;
     }
 }

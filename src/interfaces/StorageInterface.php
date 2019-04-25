@@ -21,8 +21,8 @@ interface StorageInterface
     public function getPage(string $pageName): ?PageInterface;
 
     /**
-     * @param string|null $id
+     * @param string|null $listName
      * @return PagesList|null
      */
-    public function getList(string $id = null): ?PagesList;
+    public function getList(string $listName = null): ?PagesList;
 }
