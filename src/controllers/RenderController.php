@@ -11,7 +11,6 @@
 namespace hiqdev\yii2\modules\pages\controllers;
 
 use hiqdev\yii2\modules\pages\models\AbstractPage;
-use hiqdev\yii2\modules\pages\models\PagesIndex;
 use Yii;
 use yii\helpers\Html;
 use yii\web\NotFoundHttpException;
@@ -26,41 +25,24 @@ class RenderController extends \yii\web\Controller
 
     /**
      * Index action.
-     * @param string|null $pageName
+     * @param string|null $page
      * @return string rendered page
+     * @throws NotFoundHttpException
      * @throws \yii\base\InvalidConfigException
      */
-    public function actionIndex(string $pageName = null)
+    public function actionIndex(string $page = null): string
     {
-        if (!$pageName) {
-            $pageName = $this->getPageName();
+        if (!$page) {
+            $page = $this->getPageName();
         }
-//        if (!$page) {
-//            $page = 'posts';
-//        }
 
-        $page = $this->module->find($pageName);
+        $page = $this->module->find($page);
 
         if ($page === null) {
             throw new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
         }
 
         return $this->renderPage($page);
-
-//        $path = $this->module->find($page);
-//
-//        if ($path === null) {
-//            throw new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
-//        }
-//        if ($this->module->isDir($path)) {
-//            $index = PagesIndex::createFromDir($path);
-//
-//            return $this->render('index', ['dataProvider' => $index->getDataProvider()]);
-//        } else {
-//            $page = AbstractPage::createFromFile($path);
-//
-//            return $this->renderPage($page);
-//        }
     }
 
     /**
@@ -93,10 +75,14 @@ class RenderController extends \yii\web\Controller
         return $this->renderContent($page->render($params));
     }
 
-    public function actionList()
+    /**
+     * @param string|null $id
+     * @return string
+     */
+    public function actionList(string $id = null): string
     {
-        $list = $this->module->findList();
+        $list = $this->module->findList($id);
 
-        return $this->renderPage($list);
+        return $this->render('index', ['dataProvider' => $list->getDataProvider()]);
     }
 }

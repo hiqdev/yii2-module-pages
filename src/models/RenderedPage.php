@@ -2,8 +2,6 @@
 
 namespace hiqdev\yii2\modules\pages\models;
 
-use hipanel\helpers\Url;
-
 class RenderedPage extends AbstractPage
 {
     /** @var null|string */
@@ -18,30 +16,46 @@ class RenderedPage extends AbstractPage
     /** @var null|string */
     private $description;
 
+    /** @var null|string */
+    private $canonical;
+
+    const META_DATA = ['keywords', 'description', 'canonical'];
+
     public function render(array $params = [])
     {
-        $this->view->registerMetaTag([
-            'name' => 'keywords',
-            'content' => $this->keywords,
-        ]);
-
-        $this->view->registerMetaTag([
-            'name' => 'description',
-            'content' => $this->description,
-        ]);
+        $this->setMetaData();
 
         return $this->text;
     }
 
-    public function renderMiniature()
+    /**
+     * Renders miniature version of page for list
+     * @return string
+     */
+    public function renderMiniature(): string
     {
-        $url = Url::to('/pages/' . $this->slug);
+        $img = $this->featuredImageUrl ?
+               "<img src=\"$this->featuredImageUrl\" alt=\"$this->slug\">" :
+               '';
 
         return <<<HTML
-<a href="$url"><h1>$this->title</h1></a>
-<img src="$this->featuredImageUrl" alt="">
+<h1 class="post-title"><a href="$this->url">$this->title</a></h1>
+$img
 $this->text
 HTML;
+    }
+
+    private function setMetaData(): void
+    {
+        foreach (self::META_DATA as $tag) {
+            if (is_null($this->{$tag})) {
+                continue;
+            }
+            $this->view->registerMetaTag([
+                'name' => $tag,
+                'content' => $this->{$tag},
+            ]);
+        }
     }
 
     /**
@@ -74,5 +88,13 @@ HTML;
     public function setFeaturedImageUrl(?string $featuredImageUrl): void
     {
         $this->featuredImageUrl = $featuredImageUrl;
+    }
+
+    /**
+     * @param null|string $canonical
+     */
+    public function setCanonical(?string $canonical): void
+    {
+        $this->canonical = $canonical;
     }
 }

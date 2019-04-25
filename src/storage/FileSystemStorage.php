@@ -12,7 +12,9 @@ namespace hiqdev\yii2\modules\pages\storage;
 
 use creocoder\flysystem\Filesystem;
 use hiqdev\yii2\collection\BaseObject;
+use hiqdev\yii2\modules\pages\interfaces\StorageInterface;
 use hiqdev\yii2\modules\pages\models\AbstractPage;
+use hiqdev\yii2\modules\pages\models\PagesList;
 use Yii;
 
 class FileSystemStorage extends BaseObject implements StorageInterface
@@ -51,6 +53,15 @@ class FileSystemStorage extends BaseObject implements StorageInterface
             if ($this->getFileSystem()->has($path)) {
                 return AbstractPage::createFromFile($path, $this);
             }
+        }
+
+        return null;
+    }
+
+    public function getList(?string $path): ?PagesList
+    {
+        if (!is_null($path) && $this->isDir($path)) {
+            return PagesList::createFromDir($path, $this);
         }
 
         return null;
@@ -151,7 +162,7 @@ class FileSystemStorage extends BaseObject implements StorageInterface
      * @return Filesystem
      * @throws \yii\base\InvalidConfigException
      */
-    private function getFileSystem(): Filesystem
+    public function getFileSystem(): Filesystem
     {
         if (!is_object($this->fileSystem)) {
             $this->fileSystem = Yii::createObject([

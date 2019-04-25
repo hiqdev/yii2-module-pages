@@ -10,11 +10,13 @@
 
 namespace hiqdev\yii2\modules\pages\storage;
 
+use hiqdev\yii2\modules\pages\interfaces\StorageInterface;
 use hiqdev\yii2\modules\pages\models\AbstractPage;
+use hiqdev\yii2\modules\pages\models\PagesList;
 use Yii;
 use yii\base\BaseObject;
 
-class ComboStorage extends BaseObject implements StorageInterface
+class CompositeStorage extends BaseObject implements StorageInterface
 {
     /** @var StorageInterface[] */
     private $storages;
@@ -37,6 +39,21 @@ class ComboStorage extends BaseObject implements StorageInterface
         foreach ($this->storages as $storage) {
             if (!is_null($page = $storage->getPage($pageName))) {
                 return $page;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param null|string $listId
+     * @return PagesList|null
+     */
+    public function getList(?string $listId = null): ?PagesList
+    {
+        foreach ($this->storages as $storage) {
+            if (!is_null($list = $storage->getList($listId))) {
+                return $list;
             }
         }
 

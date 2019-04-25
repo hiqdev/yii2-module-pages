@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2016-2017, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiqdev\yii2\modules\pages\storage;
+namespace hiqdev\yii2\modules\pages\interfaces;
 
 use hiqdev\yii2\modules\pages\models\AbstractPage;
 

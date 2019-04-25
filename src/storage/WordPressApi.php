@@ -10,6 +10,8 @@
 
 namespace hiqdev\yii2\modules\pages\storage;
 
+use hiqdev\yii2\modules\pages\interfaces\StorageInterface;
+use hiqdev\yii2\modules\pages\models\PagesList;
 use Yii;
 use hiqdev\yii2\modules\pages\models\AbstractPage;
 use hiqdev\yii2\modules\pages\models\RenderedPage;
@@ -18,8 +20,24 @@ use Vnn\WpApiClient\Http\GuzzleAdapter;
 use Vnn\WpApiClient\WpClient;
 use GuzzleHttp\Client as GuzzleClient;
 use yii\base\BaseObject;
+use yii\di\Instance;
 use yii\helpers\Url;
 
+/**
+ * Class WordPressApi provides interaction with WordPress REST Api.
+ *
+ * The configuration in di-container should be like this:
+ *
+ * ```
+ * 'WordpressApi' => [
+ *      'class'     => full name of this class,
+ *      'url'       => url to deployed wordpress,
+ *      'login'     => admin login,
+ *      'password'  => admin password,
+ *  ]
+ * ```
+ * @package hiqdev\yii2\modules\pages\storage
+ */
 class WordPressApi extends BaseObject implements StorageInterface
 {
     /** @var WpClient */
@@ -50,6 +68,9 @@ class WordPressApi extends BaseObject implements StorageInterface
         if ($translatedPage && $language !== $pageData['lang']) {
             Yii::$app->response->redirect(Url::to('/pages/' . $translatedPage));
         }
+        if (!$translatedPage && $language !== $pageData['lang']) {
+            $canonical = Url::to($pageData['lang'] . '/pages/' . $pageData['slug'], true);
+        }
 
         return Yii::createObject([
             'class' => RenderedPage::class,
@@ -57,10 +78,11 @@ class WordPressApi extends BaseObject implements StorageInterface
             'text' => $pageData['content']['rendered'],
             'keywords' => $pageData['seo']['keywords'],
             'description' => $pageData['seo']['description'],
+            'canonical' => $canonical ?? null
         ]);
     }
 
-    public function getList(): ?AbstractPage
+    public function getList(): ?PagesList
     {
         $listData = $this->getClient()->posts()->get(null, [
             'lang'  => \Yii::$app->language,
@@ -70,22 +92,19 @@ class WordPressApi extends BaseObject implements StorageInterface
             return null;
         }
 
-        $text = '';
+        $pages = [];
         foreach ($listData as $pageData) {
-            $text .= (Yii::createObject([
+            $pages[] = (Yii::createObject([
                 'class' => RenderedPage::class,
                 'title' => $pageData['title']['rendered'],
                 'text' => $pageData['excerpt']['rendered'],
                 'slug' => $pageData['slug'],
                 'featuredImageUrl' => $pageData['featured_image_url'],
-            ]))->renderMiniature();
+                'url' => Url::to('/pages/' . $pageData['slug'])
+            ]));
         }
 
-        return Yii::createObject([
-            'class' => RenderedPage::class,
-            'title' => 'List of Pages',
-            'text' => $text,
-        ]);
+        return Yii::createObject(PagesList::class, [ $pages ]);
     }
 
     private function getClient(): WpClient
@@ -93,7 +112,7 @@ class WordPressApi extends BaseObject implements StorageInterface
         if (!$this->client) {
             $this->client = Yii::$container->get(WpClient::class, [
                 Yii::$container->get(GuzzleAdapter::class, [
-                    Yii::$container->get(GuzzleClient::class)
+                    Instance::of(GuzzleClient::class)
                 ]),
                 $this->url
             ]);

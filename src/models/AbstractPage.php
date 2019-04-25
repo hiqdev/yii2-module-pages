@@ -11,7 +11,7 @@
 namespace hiqdev\yii2\modules\pages\models;
 
 use hiqdev\yii2\modules\pages\storage\FileSystemStorage;
-use hiqdev\yii2\modules\pages\storage\StorageInterface;
+use hiqdev\yii2\modules\pages\interfaces\StorageInterface;
 use Symfony\Component\Yaml\Yaml;
 use Yii;
 
@@ -164,5 +164,13 @@ abstract class AbstractPage extends \yii\base\BaseObject
     public function setText(string $text): void
     {
         $this->text = $text;
+    }
+
+    /**
+     * @param string $url
+     */
+    public function setUrl(string $url): void
+    {
+        $this->url = $url;
     }
 }
