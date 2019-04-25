@@ -17,7 +17,7 @@ class PhpPage extends AbstractPage
 {
     public function render(array $params = [])
     {
-        $path = Module::getInstance()->getLocalPath($this->path);
+        $path = $this->storage->getLocalPath($this->path);
 
         return Yii::$app->getView()->renderFile($path, $params);
     }

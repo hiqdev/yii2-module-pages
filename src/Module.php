@@ -10,29 +10,17 @@
 
 namespace hiqdev\yii2\modules\pages;
 
+use hiqdev\yii2\modules\pages\models\AbstractPage;
+use hiqdev\yii2\modules\pages\models\PagesList;
+use hiqdev\yii2\modules\pages\interfaces\StorageInterface;
 use Yii;
 
 class Module extends \yii\base\Module
 {
+    /** @var array|StorageInterface */
     protected $_storage;
 
-    public $pageClasses = [
-        ''      => \hiqdev\yii2\modules\pages\models\OtherPage::class,
-        'md'    => \hiqdev\yii2\modules\pages\models\MarkdownPage::class,
-        'php'   => \hiqdev\yii2\modules\pages\models\PhpPage::class,
-        'twig'  => \hiqdev\yii2\modules\pages\models\TwigPage::class,
-    ];
-
-    public function findPageClass($extension)
-    {
-        if (empty($this->pageClasses[$extension])) {
-            $extension = '';
-        }
-
-        return $this->pageClasses[$extension];
-    }
-
-    public static function getInstance()
+    public static function getInstance(): Module
     {
         return Yii::$app->getModule('pages');
     }
@@ -46,68 +34,43 @@ class Module extends \yii\base\Module
         return Yii::$app->getViewPath();
     }
 
-    public function find($page)
+    /**
+     * @param string $pageName
+     * @return AbstractPage|null
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function find(string $pageName): ?AbstractPage
     {
-        if ($this->isDir($page)) {
-            foreach (['index', 'README'] as $name) {
-                $index = $this->find($page . '/' . $name);
-                if ($index) {
-                    return $index;
-                }
-            }
-        }
+        $page = $this->getStorage()->getPage($pageName);
 
-        if ($this->getStorage()->has($page)) {
-            return $page;
-        }
-
-        foreach (array_keys($this->pageClasses) as $extension) {
-            $path = $page . '.' . $extension;
-            if ($this->getStorage()->has($path)) {
-                return $path;
-            }
-        }
-
-        return null;
-    }
-
-    public function isDir($page)
-    {
-        if (!$this->getStorage()->has($page)) {
-            return null;
-        }
-        $meta = $this->getMetadata($page);
-
-        return $meta['type'] === 'dir';
-    }
-
-    public function getMetadata($page)
-    {
-        return $this->getStorage()->getMetadata($page);
+        return $page;
     }
 
     /**
-     * Reads given path as array of already rtrimmed lines.
+     * @param string|null $id
+     * @return PagesList|null
+     * @throws \yii\base\InvalidConfigException
      */
-    public function readArray($path)
+    public function findList(string $id = null): ?PagesList
     {
-        /// XXX: performance
-        return preg_split("/((\r?\n)|(\r\n?))/", $this->getStorage()->read($path));
+        $list = $this->getStorage()->getList($id);
+
+        return $list;
     }
 
-    public function getLocalPath($path)
+    /**
+     * @param array $storageConfig
+     */
+    public function setStorage($storageConfig): void
     {
-        /// XXX: works for Local Filesystem only
-        /// TODO: implement copying for others
-        return $this->getStorage()->path . '/' . $path;
+        $this->_storage = $storageConfig;
     }
 
-    public function setStorage($value)
-    {
-        $this->_storage = $value;
-    }
-
-    public function getStorage()
+    /**
+     * @return StorageInterface
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function getStorage(): StorageInterface
     {
         if (!is_object($this->_storage)) {
             $this->_storage = Yii::createObject($this->_storage);

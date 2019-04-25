@@ -31,7 +31,9 @@ return [
         ],
         'urlManager' => [
             'rules' => [
+                'pages' => 'pages/render/list',
                 'pages/list' => 'pages/render/list',
+                'pages/list/<id:.*>' => 'pages/render/list',
                 'pages/<page:.*>' => 'pages/render/index',
             ],
         ],
@@ -39,7 +41,7 @@ return [
             'translations' => [
                 'hiqdev:pages' => [
                     'class' => \yii\i18n\PhpMessageSource::class,
-                    'basePath' => '@hiqdev/com/messages',
+                    'basePath' => '@hiqdev/yii2/modules/pages/messages',
                 ],
             ],
         ],

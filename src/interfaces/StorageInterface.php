@@ -8,7 +8,11 @@
  * @copyright Copyright (c) 2016-2017, HiQDev (http://hiqdev.com/)
  */
 
-return [
-    'Newer' => 'Новее',
-    'Older' => 'Старее',
-];
+namespace hiqdev\yii2\modules\pages\interfaces;
+
+use hiqdev\yii2\modules\pages\models\AbstractPage;
+
+interface StorageInterface
+{
+    public function getPage(string $pageName): ?AbstractPage;
+}

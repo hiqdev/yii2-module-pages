@@ -10,22 +10,50 @@
 
 namespace hiqdev\yii2\modules\pages\models;
 
+use hiqdev\yii2\modules\pages\storage\FileSystemStorage;
+use hiqdev\yii2\modules\pages\interfaces\StorageInterface;
 use Symfony\Component\Yaml\Yaml;
 use Yii;
 
 abstract class AbstractPage extends \yii\base\BaseObject
 {
+    /** @var \yii\web\View */
+    protected $view;
+
     public $layout;
 
+    /** @var string */
     public $title;
 
+    /** @var null|string */
     protected $path;
 
+    /** @var string */
     protected $text;
 
+    /** @var array  */
     protected $data = [];
 
+    /** @var string */
     protected $url;
+
+    /** @var StorageInterface  */
+    protected $storage;
+
+    public function __construct($path = null, StorageInterface $storage = null, $config = [])
+    {
+        if ($path) {
+            $this->storage = $storage;
+            list($data, $text) = $this->extractData($path);
+
+            $this->path = $path;
+            $this->text = $text;
+            $this->setData($data);
+        }
+
+        $this->view = Yii::$app->view;
+        parent::__construct($config);
+    }
 
     public function setData($data)
     {
@@ -45,15 +73,6 @@ abstract class AbstractPage extends \yii\base\BaseObject
         return $this->data;
     }
 
-    public function __construct($path)
-    {
-        list($data, $text) = $this->extractData($path);
-
-        $this->path = $path;
-        $this->text = $text;
-        $this->setData($data);
-    }
-
     public function getPath()
     {
         return $this->path;
@@ -69,23 +88,17 @@ abstract class AbstractPage extends \yii\base\BaseObject
         return $this->url ?: ['/pages/render/index', 'page' => $this->getPath()];
     }
 
-    public static function getModule()
-    {
-        /// XXX think
-        return Yii::$app->getModule('pages');
-    }
-
-    public static function createFromFile($path)
+    public static function createFromFile($path, FileSystemStorage $storage)
     {
         $extension = pathinfo($path)['extension'];
-        $class = static::getModule()->findPageClass($extension);
+        $class = $storage->findPageClass($extension);
 
-        return new $class($path);
+        return new $class($path, $storage);
     }
 
     public function extractData($path)
     {
-        $lines = static::getModule()->readArray($path);
+        $lines = $this->storage->readArray($path);
         $yaml = $this->readQuotedLines($lines, '/^---$/', '/^---$/');
         if (empty($yaml)) {
             $data = [];
@@ -144,4 +157,20 @@ abstract class AbstractPage extends \yii\base\BaseObject
      * @abstract
      */
     abstract public function render(array $params = []);
+
+    /**
+     * @param string $text
+     */
+    public function setText(string $text): void
+    {
+        $this->text = $text;
+    }
+
+    /**
+     * @param string $url
+     */
+    public function setUrl(string $url): void
+    {
+        $this->url = $url;
+    }
 }

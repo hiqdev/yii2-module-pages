@@ -1,6 +1,6 @@
 <?php
 
-use hiqdev\themes\hyde\widgets\LinkPager;
+use yii\widgets\LinkPager;
 use yii\helpers\Html;
 use yii\widgets\ListView;
 
@@ -20,14 +20,13 @@ $this->title = Yii::$app->name;
         'dataProvider' => $dataProvider,
         'pager' => [
             'class' => LinkPager::class,
-            'prevPageLabel' => Yii::t('hiqdev:com', 'Newer'),
-            'nextPageLabel' => Yii::t('hiqdev:com', 'Older'),
+            'prevPageLabel' => Yii::t('hiqdev:pages', 'Newer'),
+            'nextPageLabel' => Yii::t('hiqdev:pages', 'Older'),
         ],
         'itemView' => function ($model, $key, $item, $widget) {
-            $out = Html::tag('h1', Html::a($model->title, $model->getUrl()), ['class' => 'post-title']);
-            $out .= Html::tag('span', Yii::$app->formatter->asDate($model->date), ['class' => 'post-date']);
-
-            return $out . $model->render();
+            return  method_exists($model, 'renderMiniature') ?
+                    $model->renderMiniature() :
+                    $model->render();
         },
     ]) ?>
 <?php endif ?>

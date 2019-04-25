@@ -11,10 +11,10 @@
 namespace hiqdev\yii2\modules\pages\controllers;
 
 use hiqdev\yii2\modules\pages\models\AbstractPage;
-use hiqdev\yii2\modules\pages\models\PagesIndex;
 use Yii;
 use yii\helpers\Html;
 use yii\web\NotFoundHttpException;
+
 
 class RenderController extends \yii\web\Controller
 {
@@ -25,49 +25,64 @@ class RenderController extends \yii\web\Controller
 
     /**
      * Index action.
-     * @param string $page
+     * @param string|null $page
      * @return string rendered page
+     * @throws NotFoundHttpException
+     * @throws \yii\base\InvalidConfigException
      */
-    public function actionIndex($page = null)
+    public function actionIndex(string $page = null): string
     {
         if (!$page) {
-            $page = trim(Yii::$app->request->getUrl(), '/');
-        }
-        if (!$page) {
-            $page = 'posts';
+            $page = $this->getPageName();
         }
 
-        $path = $this->module->find($page);
+        $page = $this->module->find($page);
 
-        if ($path === null) {
+        if ($page === null) {
             throw new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
         }
 
-        if ($this->module->isDir($path)) {
-            $index = PagesIndex::createFromDir($path);
-
-            return $this->render('index', ['dataProvider' => $index->getDataProvider()]);
-        } else {
-            $page = AbstractPage::createFromFile($path);
-
-            return $this->renderPage($page);
-        }
+        return $this->renderPage($page);
     }
 
-    public function renderPage($page, array $params = [])
+    /**
+     * @return string
+     * @throws \yii\base\InvalidConfigException
+     */
+    private function getPageName(): string
+    {
+        preg_match('/^.+pages\/(?<pageName>.+)$/', Yii::$app->request->getUrl(), $matches);
+
+        return trim($matches['pageName'], '/');
+    }
+
+    /**
+     * @param AbstractPage $page
+     * @param array $params
+     * @return string
+     */
+    private function renderPage(AbstractPage $page, array $params = []): string
     {
         if ($page->layout) {
             $this->layout = $page->layout;
         }
-
         if ($page->title) {
             $this->view->title = Html::encode($page->title);
         }
-
         $this->view->params = $page->getData();
-
         $params['controller'] = $this;
 
         return $this->renderContent($page->render($params));
+    }
+
+    /**
+     * @param string|null $id
+     * @return string
+     */
+    public function actionList(string $id = null): string
+    {
+        $list = $this->module->findList($id);
+
+        return $this->render('index', ['dataProvider' => $list->getDataProvider()]);
     }
 }
