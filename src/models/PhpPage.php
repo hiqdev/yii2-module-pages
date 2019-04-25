@@ -10,12 +10,16 @@
 
 namespace hiqdev\yii2\modules\pages\models;
 
-use hiqdev\yii2\modules\pages\Module;
+use hiqdev\yii2\modules\pages\interfaces\PageInterface;
 use Yii;
 
-class PhpPage extends AbstractPage
+class PhpPage extends AbstractPage implements PageInterface
 {
-    public function render(array $params = [])
+    /**
+     * @param array $params
+     * @return string
+     */
+    public function render(array $params = []): string
     {
         $path = $this->storage->getLocalPath($this->path);
 

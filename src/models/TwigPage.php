@@ -15,7 +15,11 @@ use Yii;
 
 class TwigPage extends AbstractPage
 {
-    public function render(array $params = [])
+    /**
+     * @param array $params
+     * @return string
+     */
+    public function render(array $params = []): string
     {
         $path = Module::getInstance()->getLocalPath($this->path);
 

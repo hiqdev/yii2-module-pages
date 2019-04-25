@@ -10,12 +10,14 @@
 
 namespace hiqdev\yii2\modules\pages\models;
 
+use Yii;
+use hiqdev\yii2\modules\pages\interfaces\PageInterface;
 use hiqdev\yii2\modules\pages\storage\FileSystemStorage;
 use hiqdev\yii2\modules\pages\interfaces\StorageInterface;
 use Symfony\Component\Yaml\Yaml;
-use Yii;
+use yii\base\BaseObject;
 
-abstract class AbstractPage extends \yii\base\BaseObject
+abstract class AbstractPage extends BaseObject implements PageInterface
 {
     /** @var \yii\web\View */
     protected $view;
@@ -68,7 +70,10 @@ abstract class AbstractPage extends \yii\base\BaseObject
         }
     }
 
-    public function getData()
+    /**
+     * @return array
+     */
+    public function getData(): array
     {
         return $this->data;
     }
@@ -149,14 +154,6 @@ abstract class AbstractPage extends \yii\base\BaseObject
 
         return $res;
     }
-
-    /**
-     * Renders the page with given params.
-     *
-     * @param array $params
-     * @abstract
-     */
-    abstract public function render(array $params = []);
 
     /**
      * @param string $text

@@ -15,7 +15,13 @@ use Yii;
 
 class OtherPage extends AbstractPage
 {
-    public function render(array $params = [])
+    /**
+     * @param array $params
+     * @return string
+     * @throws \yii\base\ExitException
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function render(array $params = []): string
     {
         $fullPath = Module::getInstance()->getLocalPath($this->path);
         $mimeType = mime_content_type($fullPath);

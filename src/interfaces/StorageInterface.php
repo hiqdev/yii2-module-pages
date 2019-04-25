@@ -10,9 +10,19 @@
 
 namespace hiqdev\yii2\modules\pages\interfaces;
 
-use hiqdev\yii2\modules\pages\models\AbstractPage;
+use hiqdev\yii2\modules\pages\models\PagesList;
 
 interface StorageInterface
 {
-    public function getPage(string $pageName): ?AbstractPage;
+    /**
+     * @param string $pageName
+     * @return PageInterface|null
+     */
+    public function getPage(string $pageName): ?PageInterface;
+
+    /**
+     * @param string|null $id
+     * @return PagesList|null
+     */
+    public function getList(string $id = null): ?PagesList;
 }

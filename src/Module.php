@@ -10,6 +10,7 @@
 
 namespace hiqdev\yii2\modules\pages;
 
+use hiqdev\yii2\modules\pages\interfaces\PageInterface;
 use hiqdev\yii2\modules\pages\models\AbstractPage;
 use hiqdev\yii2\modules\pages\models\PagesList;
 use hiqdev\yii2\modules\pages\interfaces\StorageInterface;
@@ -19,6 +20,9 @@ class Module extends \yii\base\Module
 {
     /** @var array|StorageInterface */
     protected $_storage;
+
+    /** @var int */
+    private $pageSize;
 
     public static function getInstance(): Module
     {
@@ -39,7 +43,7 @@ class Module extends \yii\base\Module
      * @return AbstractPage|null
      * @throws \yii\base\InvalidConfigException
      */
-    public function find(string $pageName): ?AbstractPage
+    public function find(string $pageName): ?PageInterface
     {
         $page = $this->getStorage()->getPage($pageName);
 
@@ -77,5 +81,21 @@ class Module extends \yii\base\Module
         }
 
         return $this->_storage;
+    }
+
+    /**
+     * @param int $pageSize
+     */
+    public function setPageSize(int $pageSize): void
+    {
+        $this->pageSize = $pageSize;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPageSize(): int
+    {
+        return $this->pageSize;
     }
 }

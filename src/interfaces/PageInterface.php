@@ -8,20 +8,14 @@
  * @copyright Copyright (c) 2016-2017, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiqdev\yii2\modules\pages\models;
+namespace hiqdev\yii2\modules\pages\interfaces;
 
-use cebe\markdown\GithubMarkdown;
 
-class MarkdownPage extends AbstractPage
+interface PageInterface
 {
     /**
      * @param array $params
      * @return string
      */
-    public function render(array $params = []): string
-    {
-        $parser = new GithubMarkdown();
-
-        return $parser->parse($this->text);
-    }
+    public function render(array $params = []): string;
 }

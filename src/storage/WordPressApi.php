@@ -10,10 +10,10 @@
 
 namespace hiqdev\yii2\modules\pages\storage;
 
+use Yii;
+use hiqdev\yii2\modules\pages\interfaces\PageInterface;
 use hiqdev\yii2\modules\pages\interfaces\StorageInterface;
 use hiqdev\yii2\modules\pages\models\PagesList;
-use Yii;
-use hiqdev\yii2\modules\pages\models\AbstractPage;
 use hiqdev\yii2\modules\pages\models\RenderedPage;
 use Vnn\WpApiClient\Auth\WpBasicAuth;
 use Vnn\WpApiClient\Http\GuzzleAdapter;
@@ -34,6 +34,8 @@ use yii\helpers\Url;
  *      'url'       => url to deployed wordpress,
  *      'login'     => admin login,
  *      'password'  => admin password,
+ *
+ *      'login' and 'password' fields aren't necessary for GET requests.
  *  ]
  * ```
  * @package hiqdev\yii2\modules\pages\storage
@@ -52,7 +54,7 @@ class WordPressApi extends BaseObject implements StorageInterface
     /** @var string */
     private $password;
 
-    public function getPage(string $pageName): ?AbstractPage
+    public function getPage(string $pageName): ?PageInterface
     {
         $language = \Yii::$app->language;
         $pageData = $this->getClient()->posts()->get(null, [
@@ -82,7 +84,7 @@ class WordPressApi extends BaseObject implements StorageInterface
         ]);
     }
 
-    public function getList(): ?PagesList
+    public function getList(string $id = null): ?PagesList
     {
         $listData = $this->getClient()->posts()->get(null, [
             'lang'  => \Yii::$app->language,
