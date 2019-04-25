@@ -10,6 +10,7 @@
 
 namespace hiqdev\yii2\modules\pages\models;
 
+use Yii;
 use hiqdev\yii2\modules\pages\storage\FileSystemStorage;
 use yii\data\ArrayDataProvider;
 use yii\helpers\ArrayHelper;
@@ -59,7 +60,7 @@ class PagesList
         return new ArrayDataProvider([
             'allModels' => $this->pages,
             'pagination' => [
-                'pageSize' => 5,
+                'pageSize' => Yii::$app->getModule('pages')->getPageSize(),
             ]
         ]);
     }

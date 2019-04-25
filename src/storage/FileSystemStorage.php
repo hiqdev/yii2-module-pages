@@ -12,6 +12,7 @@ namespace hiqdev\yii2\modules\pages\storage;
 
 use creocoder\flysystem\Filesystem;
 use hiqdev\yii2\collection\BaseObject;
+use hiqdev\yii2\modules\pages\interfaces\PageInterface;
 use hiqdev\yii2\modules\pages\interfaces\StorageInterface;
 use hiqdev\yii2\modules\pages\models\AbstractPage;
 use hiqdev\yii2\modules\pages\models\PagesList;
@@ -37,7 +38,7 @@ class FileSystemStorage extends BaseObject implements StorageInterface
      * @return AbstractPage|null
      * @throws \yii\base\InvalidConfigException
      */
-    public function getPage(string $page): ?AbstractPage
+    public function getPage(string $page): ?PageInterface
     {
         if ($this->isDir($page)) {
             foreach (['index', 'README'] as $name) {
@@ -58,7 +59,7 @@ class FileSystemStorage extends BaseObject implements StorageInterface
         return null;
     }
 
-    public function getList(?string $path): ?PagesList
+    public function getList(string $path = null): ?PagesList
     {
         if (!is_null($path) && $this->isDir($path)) {
             return PagesList::createFromDir($path, $this);

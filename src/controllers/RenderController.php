@@ -76,12 +76,12 @@ class RenderController extends \yii\web\Controller
     }
 
     /**
-     * @param string|null $id
+     * @param string|null $listName
      * @return string
      */
-    public function actionList(string $id = null): string
+    public function actionList(string $listName = null): string
     {
-        $list = $this->module->findList($id);
+        $list = $this->module->findList($listName);
 
         return $this->render('index', ['dataProvider' => $list->getDataProvider()]);
     }

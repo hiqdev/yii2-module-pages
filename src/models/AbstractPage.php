@@ -10,12 +10,14 @@
 
 namespace hiqdev\yii2\modules\pages\models;
 
+use Yii;
+use hiqdev\yii2\modules\pages\interfaces\PageInterface;
 use hiqdev\yii2\modules\pages\storage\FileSystemStorage;
 use hiqdev\yii2\modules\pages\interfaces\StorageInterface;
 use Symfony\Component\Yaml\Yaml;
-use Yii;
+use yii\base\BaseObject;
 
-abstract class AbstractPage extends \yii\base\BaseObject
+abstract class AbstractPage extends BaseObject implements PageInterface
 {
     /** @var \yii\web\View */
     protected $view;
@@ -36,6 +38,23 @@ abstract class AbstractPage extends \yii\base\BaseObject
 
     /** @var string */
     protected $url;
+
+    /** @var null|string */
+    protected $featuredImageUrl;
+
+    /** @var null|string */
+    protected $slug;
+
+    /** @var null|string */
+    protected $keywords;
+
+    /** @var null|string */
+    protected $description;
+
+    /** @var null|string */
+    protected $canonical;
+
+    const META_DATA = ['keywords', 'description', 'canonical'];
 
     /** @var StorageInterface  */
     protected $storage;
@@ -68,7 +87,10 @@ abstract class AbstractPage extends \yii\base\BaseObject
         }
     }
 
-    public function getData()
+    /**
+     * @return array
+     */
+    public function getData(): array
     {
         return $this->data;
     }
@@ -151,14 +173,6 @@ abstract class AbstractPage extends \yii\base\BaseObject
     }
 
     /**
-     * Renders the page with given params.
-     *
-     * @param array $params
-     * @abstract
-     */
-    abstract public function render(array $params = []);
-
-    /**
      * @param string $text
      */
     public function setText(string $text): void
@@ -172,5 +186,58 @@ abstract class AbstractPage extends \yii\base\BaseObject
     public function setUrl(string $url): void
     {
         $this->url = $url;
+    }
+
+    protected function setMetaData(): void
+    {
+        foreach (self::META_DATA as $tag) {
+            if (is_null($this->{$tag})) {
+                continue;
+            }
+            $this->view->registerMetaTag([
+                'name' => $tag,
+                'content' => $this->{$tag},
+            ]);
+        }
+    }
+
+    /**
+     * @param null|string $slug
+     */
+    public function setSlug(?string $slug): void
+    {
+        $this->slug = $slug;
+    }
+
+    /**
+     * @param null|string $keywords
+     */
+    public function setKeywords(?string $keywords): void
+    {
+        $this->keywords = $keywords;
+    }
+
+    /**
+     * @param null|string $description
+     */
+    public function setDescription(?string $description): void
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @param null|string $featuredImageUrl
+     */
+    public function setFeaturedImageUrl(?string $featuredImageUrl): void
+    {
+        $this->featuredImageUrl = $featuredImageUrl;
+    }
+
+    /**
+     * @param null|string $canonical
+     */
+    public function setCanonical(?string $canonical): void
+    {
+        $this->canonical = $canonical;
     }
 }

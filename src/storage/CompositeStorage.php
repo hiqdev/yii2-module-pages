@@ -10,10 +10,11 @@
 
 namespace hiqdev\yii2\modules\pages\storage;
 
+use Yii;
+use hiqdev\yii2\modules\pages\interfaces\PageInterface;
 use hiqdev\yii2\modules\pages\interfaces\StorageInterface;
 use hiqdev\yii2\modules\pages\models\AbstractPage;
 use hiqdev\yii2\modules\pages\models\PagesList;
-use Yii;
 use yii\base\BaseObject;
 
 class CompositeStorage extends BaseObject implements StorageInterface
@@ -34,7 +35,7 @@ class CompositeStorage extends BaseObject implements StorageInterface
      * @param string $pageName
      * @return AbstractPage|null
      */
-    public function getPage(string $pageName): ?AbstractPage
+    public function getPage(string $pageName): ?PageInterface
     {
         foreach ($this->storages as $storage) {
             if (!is_null($page = $storage->getPage($pageName))) {
@@ -46,13 +47,13 @@ class CompositeStorage extends BaseObject implements StorageInterface
     }
 
     /**
-     * @param null|string $listId
+     * @param null|string $listName
      * @return PagesList|null
      */
-    public function getList(?string $listId = null): ?PagesList
+    public function getList(string $listName = null): ?PagesList
     {
         foreach ($this->storages as $storage) {
-            if (!is_null($list = $storage->getList($listId))) {
+            if (!is_null($list = $storage->getList($listName))) {
                 return $list;
             }
         }
