@@ -8,9 +8,22 @@ use yii\base\Component;
 class AdditionalPages extends Component
 {
     /**
+     * @var array
+     */
+    public $params = [];
+
+    /**
+     * @return object
+     */
+    public static function instantiate(): object
+    {
+        return Yii::$container->get(static::class);
+    }
+
+    /**
      * @return AdditionalPage[]
      */
-    public static function getPages(): array
+    public function getPages(): array
     {
         $pages = Yii::$app->params['module.pages.additional.rules'];
 
@@ -20,10 +33,7 @@ class AdditionalPages extends Component
 
         $list = [];
         foreach ($pages as $label => $params) {
-            $list[] = new AdditionalPage($label, array_merge($params, [
-                'registrarName' => Yii::$app->params['organization.name'],
-                'registrarUrl' => Yii::$app->params['organization.url'],
-            ]));
+            $list[] = new AdditionalPage($label, array_merge($params, $this->params));
         }
 
         return $list;

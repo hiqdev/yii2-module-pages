@@ -11,5 +11,4 @@
 return [
     'Newer' => 'Новее',
     'Older' => 'Старее',
-    '.UA Policy Information' => 'Информация о политике .UA',
 ];
