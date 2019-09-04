@@ -8,16 +8,25 @@ use yii\base\Component;
 class AdditionalPages extends Component
 {
     /**
+     * Global params
      * @var array
      */
     public $params = [];
 
     /**
-     * @return object
+     * @var array
      */
-    public static function instantiate(): object
+    public $pages = [];
+
+    /**
+     * @param string $alias
+     * @return object
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\di\NotInstantiableException
+     */
+    public static function instantiate(string $alias): object
     {
-        return Yii::$container->get(static::class);
+        return Yii::$container->get($alias);
     }
 
     /**
@@ -25,14 +34,12 @@ class AdditionalPages extends Component
      */
     public function getPages(): array
     {
-        $pages = Yii::$app->params['module.pages.additional.rules'];
-
-        if (empty($pages)) {
+        if (empty($this->pages)) {
             return [];
         }
 
         $list = [];
-        foreach ($pages as $label => $params) {
+        foreach ($this->pages as $label => $params) {
             $list[] = new AdditionalPage($label, array_merge($params, $this->params));
         }
 

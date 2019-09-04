@@ -44,7 +44,7 @@ class AdditionalPage implements PageInterface
         $this->label = $label;
         $this->dictionary = ArrayHelper::remove($params, 'dictionary');
         $this->pathToPage = ArrayHelper::remove($params, 'path');
-        $this->params = $params;
+        $this->params = ArrayHelper::remove($params, 'params', []);
     }
 
     /**
