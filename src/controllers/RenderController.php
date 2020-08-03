@@ -53,7 +53,7 @@ class RenderController extends \yii\web\Controller
     {
         preg_match('/^.+pages\/(?<pageName>.+)$/', Yii::$app->request->getUrl(), $matches);
 
-        return trim($matches['pageName'], '/');
+        return trim($matches['pageName'], '/') ?: 'index';
     }
 
     /**
