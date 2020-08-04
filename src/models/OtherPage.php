@@ -23,7 +23,7 @@ class OtherPage extends AbstractPage
      */
     public function render(array $params = []): string
     {
-        $fullPath = Module::getInstance()->getLocalPath($this->path);
+        $fullPath = Module::getInstance()->getStorage()->getLocalPath($this->path);
         $mimeType = mime_content_type($fullPath);
 
         if ($mimeType === 'text/plain') {
