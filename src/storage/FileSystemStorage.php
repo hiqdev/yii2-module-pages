@@ -31,7 +31,7 @@ class FileSystemStorage extends BaseObject implements StorageInterface
         'md'    => \hiqdev\yii2\modules\pages\models\MarkdownPage::class,
         'php'   => \hiqdev\yii2\modules\pages\models\PhpPage::class,
         'twig'  => \hiqdev\yii2\modules\pages\models\TwigPage::class,
-        'feature' => \hiqdev\yii2\modules\pages\models\OtherPage::class,
+        'feature' => \hiqdev\yii2\modules\pages\models\BehatPage::class,
     ];
 
     /**
