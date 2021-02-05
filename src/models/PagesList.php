@@ -64,11 +64,4 @@ class PagesList
             ]
         ]);
     }
-
-    public function render(array $params = []): string
-    {
-        return Yii::$app->getView()->renderFile('@hipanel/site/views/themes/dataserv/articles/category.php', array_merge($params, [
-            'dataProvider' => $this->getDataProvider()
-        ]));
-    }
 }

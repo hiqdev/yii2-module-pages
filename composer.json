@@ -44,8 +44,7 @@
     ],
     "require": {
         "yiisoft/yii2-twig": "^2.0",
-        "symfony/yaml": "^3.2",
-        "vnn/wordpress-rest-api-client": "^1.3"
+        "symfony/yaml": "^3.2"
     },
     "require-dev": {
         "hiqdev/hidev-php": "<2.0 || dev-master",
