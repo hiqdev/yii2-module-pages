@@ -72,7 +72,7 @@ class RenderController extends \yii\web\Controller
         $this->view->params = $page->getData();
         $params['controller'] = $this;
 
-        return $this->render('@hipanel/site/views/themes/dataserv/articles/single', ['model' => $page]);
+        return $this->renderContent($page->render($params));
     }
 
     /**
@@ -83,6 +83,6 @@ class RenderController extends \yii\web\Controller
     {
         $list = $this->module->findList($listName);
 
-        return $this->render('@hipanel/site/views/themes/dataserv/articles/category', ['dataProvider' => $list->getDataProvider()]);
+        return $this->render('index', ['dataProvider' => $list->getDataProvider()]);
     }
 }
