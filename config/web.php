@@ -35,6 +35,11 @@ return [
                 'pages/list' => 'pages/render/list',
                 'pages/list/<id:.*>' => 'pages/render/list',
                 'pages/<page:.*>' => 'pages/render/index',
+
+                'articles' => 'articles/render/list',
+                'articles/list' => 'articles/render/list',
+                'articles/list/<name:.*>' => 'articles/render/list',
+                'articles/<page:.*>' => 'articles/render/index',
             ],
         ],
         'i18n' => [

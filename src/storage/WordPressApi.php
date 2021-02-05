@@ -10,6 +10,7 @@
 
 namespace hiqdev\yii2\modules\pages\storage;
 
+use hiqdev\yii2\modules\pages\Module;
 use Yii;
 use hiqdev\yii2\modules\pages\interfaces\PageInterface;
 use hiqdev\yii2\modules\pages\interfaces\StorageInterface;
@@ -54,11 +55,13 @@ class WordPressApi extends BaseObject implements StorageInterface
     /** @var string */
     private $password;
 
+    public Module $pages;
+
     public function getPage(string $pageName): ?PageInterface
     {
-        $language = \Yii::$app->language;
+        $language = Yii::$app->language;
         $pageData = $this->getClient()->posts()->get(null, [
-            'slug'  => $pageName,
+            'slug' => $pageName,
         ]);
 
         if (empty($pageData)) {
@@ -68,10 +71,10 @@ class WordPressApi extends BaseObject implements StorageInterface
         $pageData = $pageData[0];
         $translatedPage = $pageData['translation'][$language];
         if ($translatedPage && $language !== $pageData['lang']) {
-            Yii::$app->response->redirect(Url::to('/pages/' . $translatedPage));
+            Yii::$app->response->redirect(Url::to(sprintf('/%s/%s', $this->pages->id, $translatedPage)));
         }
         if (!$translatedPage && $language !== $pageData['lang']) {
-            $canonical = Url::to($pageData['lang'] . '/pages/' . $pageData['slug'], true);
+            $canonical = Url::to(sprintf('/%s/%s/%s', $pageData['lang'], $this->pages->id, $pageData['slug']), true);
         }
 
         return Yii::createObject([
@@ -80,14 +83,14 @@ class WordPressApi extends BaseObject implements StorageInterface
             'text' => $pageData['content']['rendered'],
             'keywords' => $pageData['seo']['keywords'],
             'description' => $pageData['seo']['description'],
-            'canonical' => $canonical ?? null
+            'canonical' => $canonical ?? null,
         ]);
     }
 
     public function getList(string $listName = null): ?PagesList
     {
         $listData = $this->getClient()->posts()->get(null, [
-            'lang'  => \Yii::$app->language,
+            'lang' => Yii::$app->language,
         ]);
 
         if (empty($listData)) {
@@ -96,17 +99,17 @@ class WordPressApi extends BaseObject implements StorageInterface
 
         $pages = [];
         foreach ($listData as $pageData) {
-            $pages[] = (Yii::createObject([
+            $pages[] = Yii::createObject([
                 'class' => HtmlPage::class,
                 'title' => $pageData['title']['rendered'],
                 'text' => $pageData['excerpt']['rendered'],
                 'slug' => $pageData['slug'],
                 'featuredImageUrl' => $pageData['featured_image_url'],
-                'url' => Url::to('/pages/' . $pageData['slug'])
-            ]));
+                'url' => Url::to(sprintf('/%s/%s', $this->pages->id, $pageData['slug'])),
+            ]);
         }
 
-        return Yii::createObject(PagesList::class, [ $pages ]);
+        return Yii::createObject(PagesList::class, [$pages]);
     }
 
     private function getClient(): WpClient
@@ -114,14 +117,14 @@ class WordPressApi extends BaseObject implements StorageInterface
         if (!$this->client) {
             $this->client = Yii::$container->get(WpClient::class, [
                 Yii::$container->get(GuzzleAdapter::class, [
-                    Instance::of(GuzzleClient::class)
+                    Instance::of(GuzzleClient::class),
                 ]),
-                $this->url
+                $this->url,
             ]);
 
             $this->client->setCredentials(Yii::$container->get(WpBasicAuth::class, [
                 $this->login,
-                $this->password
+                $this->password,
             ]));
         }
 

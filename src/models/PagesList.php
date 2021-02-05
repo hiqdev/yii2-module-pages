@@ -18,7 +18,7 @@ use yii\helpers\ArrayHelper;
 class PagesList
 {
     /** @var AbstractPage[]  */
-    protected $pages = [];
+    protected array $pages = [];
 
     /**
      * PagesList constructor.
@@ -63,5 +63,12 @@ class PagesList
                 'pageSize' => Yii::$app->getModule('pages')->getPageSize(),
             ]
         ]);
+    }
+
+    public function render(array $params = []): string
+    {
+        return Yii::$app->getView()->renderFile('@hipanel/site/views/themes/dataserv/articles/category.php', array_merge($params, [
+            'dataProvider' => $this->getDataProvider()
+        ]));
     }
 }
