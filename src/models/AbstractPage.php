@@ -33,11 +33,11 @@ abstract class AbstractPage extends BaseObject implements PageInterface
     /** @var string */
     protected $text;
 
-    /** @var array  */
+    /** @var array */
     protected $data = [];
 
     /** @var string */
-    protected $url;
+    protected string $url;
 
     /** @var null|string */
     protected $featuredImageUrl;
@@ -56,14 +56,14 @@ abstract class AbstractPage extends BaseObject implements PageInterface
 
     const META_DATA = ['keywords', 'description', 'canonical'];
 
-    /** @var StorageInterface  */
+    /** @var StorageInterface */
     protected $storage;
 
     public function __construct($path = null, StorageInterface $storage = null, $config = [])
     {
         if ($path) {
             $this->storage = $storage;
-            list($data, $text) = $this->extractData($path);
+            [$data, $text] = $this->extractData($path);
 
             $this->path = $path;
             $this->text = $text;
@@ -188,7 +188,7 @@ abstract class AbstractPage extends BaseObject implements PageInterface
         $this->url = $url;
     }
 
-    protected function setMetaData(): void
+    public function setMetaData(): void
     {
         foreach (self::META_DATA as $tag) {
             if (is_null($this->{$tag})) {
@@ -239,5 +239,13 @@ abstract class AbstractPage extends BaseObject implements PageInterface
     public function setCanonical(?string $canonical): void
     {
         $this->canonical = $canonical;
+    }
+
+    /**
+     * @return string
+     */
+    public function getText(): string
+    {
+        return $this->text;
     }
 }

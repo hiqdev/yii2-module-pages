@@ -15,6 +15,7 @@ use hiqdev\yii2\modules\pages\models\AbstractPage;
 use hiqdev\yii2\modules\pages\models\PagesList;
 use hiqdev\yii2\modules\pages\interfaces\StorageInterface;
 use Yii;
+use yii\base\InvalidConfigException;
 
 class Module extends \yii\base\Module
 {
@@ -30,7 +31,7 @@ class Module extends \yii\base\Module
     }
 
     /**
-     * This to use standard app pathes for views and layouts.
+     * This to use standard app paths for views and layouts.
      * @return string
      */
     public function getViewPath()
@@ -41,25 +42,21 @@ class Module extends \yii\base\Module
     /**
      * @param string $pageName
      * @return AbstractPage|null
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function find(string $pageName): ?PageInterface
     {
-        $page = $this->getStorage()->getPage($pageName);
-
-        return $page;
+        return $this->getStorage()->getPage($pageName);
     }
 
     /**
      * @param string|null $id
      * @return PagesList|null
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function findList(string $id = null): ?PagesList
     {
-        $list = $this->getStorage()->getList($id);
-
-        return $list;
+        return $this->getStorage()->getList($id);
     }
 
     /**
@@ -72,12 +69,12 @@ class Module extends \yii\base\Module
 
     /**
      * @return StorageInterface
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function getStorage(): StorageInterface
     {
         if (!is_object($this->_storage)) {
-            $this->_storage = Yii::createObject($this->_storage);
+            $this->_storage = Yii::createObject(array_merge($this->_storage, ['pages' => $this]));
         }
 
         return $this->_storage;

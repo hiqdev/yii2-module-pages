@@ -18,7 +18,7 @@ use yii\helpers\ArrayHelper;
 class PagesList
 {
     /** @var AbstractPage[]  */
-    protected $pages = [];
+    protected array $pages = [];
 
     /**
      * PagesList constructor.
