@@ -69,6 +69,10 @@ class AdditionalPage implements PageInterface
      */
     public function render(array $params = []): string
     {
-        return Yii::$app->view->renderFile($this->pathToPage, array_merge($this->params, $params));
+        if (is_file($this->pathToPage)) {
+            return Yii::$app->view->renderFile($this->pathToPage, array_merge($this->params, $params));
+        }
+
+        return '';
     }
 }
