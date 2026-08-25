@@ -72,8 +72,8 @@ class AdditionalPage implements PageInterface
         // 'path' is commonly configured as a Yii alias (e.g. '@hipanel/site/pages/...'),
         // which is_file() doesn't understand - it would always return false and silently
         // render an empty tab. Resolve it first; getAlias() is a no-op for plain paths.
-        $path = Yii::getAlias($this->pathToPage);
-        if (is_file($path)) {
+        $path = Yii::getAlias($this->pathToPage, false);
+        if ($path !== false && is_file($path)) {
             return Yii::$app->view->renderFile($path, array_merge($this->params, $params));
         }
 
