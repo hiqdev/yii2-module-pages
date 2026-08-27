@@ -19,6 +19,17 @@ use yii\base\BaseObject;
 
 class CompositeStorage extends BaseObject implements StorageInterface
 {
+    /**
+     * Module::getStorage() always injects 'pages' => $this (the owning Module) into
+     * whatever storage config it builds. FileSystemStorage tolerates that silently
+     * (it extends the more lenient hiqdev\yii2\collection\BaseObject); this class
+     * extends the standard, strict yii\base\BaseObject, which throws
+     * UnknownPropertyException on any config key without a matching property/setter.
+     * A plain public property is enough to absorb it - nothing here needs the value.
+     * @var \hiqdev\yii2\modules\pages\Module|null
+     */
+    public $pages;
+
     /** @var StorageInterface[] */
     private $storages;
 
